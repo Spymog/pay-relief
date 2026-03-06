@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 
 export function DebtorsHero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-32 pb-20 px-4 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 pb-20 px-4 overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 -z-10">
         <motion.div
