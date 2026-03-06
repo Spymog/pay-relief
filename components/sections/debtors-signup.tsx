@@ -2,17 +2,26 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useSignup } from '@/hooks/use-signup'
 
 export function DebtorsSignup() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const { signup, isLoading, error } = useSignup()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
+    if (!email) return
+
+    const result = await signup({
+      email,
+      signup_type: 'debtor',
+    })
+
+    if (result.success) {
       setSubmitted(true)
       setEmail('')
       setTimeout(() => setSubmitted(false), 3000)
@@ -53,14 +62,21 @@ export function DebtorsSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="bg-primary-foreground text-foreground placeholder:text-foreground/40 border-0"
+            disabled={isLoading}
+            className="bg-primary-foreground text-foreground placeholder:text-foreground/40 border-0 disabled:opacity-50"
           />
           <Button
             type="submit"
             size="lg"
-            className="bg-accent hover:bg-accent/90 text-primary gap-2 flex-shrink-0"
+            disabled={isLoading || submitted}
+            className="bg-accent hover:bg-accent/90 text-primary gap-2 flex-shrink-0 disabled:opacity-50"
           >
-            {submitted ? (
+            {isLoading ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                Saving...
+              </>
+            ) : submitted ? (
               <>
                 <CheckCircle2 className="h-4 w-4" />
                 Confirmed!
@@ -73,6 +89,18 @@ export function DebtorsSignup() {
             )}
           </Button>
         </motion.form>
+
+        {/* Error message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 text-sm text-accent mb-4 bg-primary-foreground/10 p-3 rounded-lg"
+          >
+            <AlertCircle className="h-4 w-4 flex-shrink-0" />
+            <span>{error}</span>
+          </motion.div>
+        )}
 
         {/* Benefits list */}
         <motion.div

@@ -4,9 +4,10 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useSignup } from "@/hooks/use-signup"
 
 const footerLinks = [
   { href: "/privacy", label: "Privacy" },
@@ -18,10 +19,18 @@ const footerLinks = [
 export function Footer() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const { signup, isLoading, error } = useSignup()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
+    if (!email) return
+
+    const result = await signup({
+      email,
+      signup_type: 'debtor',
+    })
+
+    if (result.success) {
       setIsSubmitted(true)
       setEmail("")
       setTimeout(() => setIsSubmitted(false), 3000)
@@ -80,35 +89,54 @@ export function Footer() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-              <div className="flex-1">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:border-accent focus:ring-accent h-12"
-                />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:border-accent focus:ring-accent h-12 disabled:opacity-50"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isLoading || isSubmitted}
+                  className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium h-12 px-6 disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent-foreground border-t-transparent mr-2" />
+                      Saving...
+                    </>
+                  ) : isSubmitted ? (
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                    >
+                      Subscribed!
+                    </motion.span>
+                  ) : (
+                    <>
+                      Subscribe
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
               </div>
-              <Button
-                type="submit"
-                className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium h-12 px-6"
-              >
-                {isSubmitted ? (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                  >
-                    Subscribed!
-                  </motion.span>
-                ) : (
-                  <>
-                    Subscribe
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 text-sm text-accent bg-primary-foreground/10 p-3 rounded-lg"
+                >
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <span>{error}</span>
+                </motion.div>
+              )}
             </form>
           </div>
         </div>

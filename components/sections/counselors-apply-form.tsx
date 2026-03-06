@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, AlertCircle } from 'lucide-react'
+import { useSignup } from '@/hooks/use-signup'
 
 export function CounselorsApplyForm() {
   const [submitted, setSubmitted] = useState(false)
@@ -16,11 +17,33 @@ export function CounselorsApplyForm() {
     experience: '',
     reason: '',
   })
+  const { signup, isLoading, error } = useSignup()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
+
+    const result = await signup({
+      email: formData.email,
+      signup_type: 'counselor',
+      full_name: formData.fullName,
+      certification: formData.certification,
+      specializations: formData.specializations,
+      experience: formData.experience,
+      reason_for_joining: formData.reason,
+    })
+
+    if (result.success) {
+      setSubmitted(true)
+      setFormData({
+        fullName: '',
+        email: '',
+        certification: '',
+        specializations: '',
+        experience: '',
+        reason: '',
+      })
+      setTimeout(() => setSubmitted(false), 3000)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -77,9 +100,10 @@ export function CounselorsApplyForm() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
+                  disabled={isLoading}
                   required
                   placeholder="John Doe"
-                  className="w-full"
+                  className="w-full disabled:opacity-50"
                 />
               </div>
 
@@ -93,9 +117,10 @@ export function CounselorsApplyForm() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  disabled={isLoading}
                   required
                   placeholder="you@example.com"
-                  className="w-full"
+                  className="w-full disabled:opacity-50"
                 />
               </div>
 
@@ -167,11 +192,31 @@ export function CounselorsApplyForm() {
               </div>
 
               {/* Submit Button */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-lg"
+                >
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <span>{error}</span>
+                </motion.div>
+              )}
+
               <Button
                 type="submit"
-                className="w-full bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-base font-semibold rounded-lg"
+                size="lg"
+                disabled={isLoading}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
               >
-                Apply as a Founding Counselor
+                {isLoading ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent mr-2" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit Application'
+                )}
               </Button>
 
               {/* Fine Print */}
