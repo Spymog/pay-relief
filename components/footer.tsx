@@ -45,7 +45,7 @@ export function Footer() {
                   className="rounded-lg object-cover brightness-110"
                 />
               </div>
-              <span className="font-serif text-xl lg:text-2xl font-semibold">
+              <span className="text-xl lg:text-2xl font-bold" style={{ fontFamily: 'var(--font-outfit)' }}>
                 PayRelief
               </span>
             </Link>

@@ -53,7 +53,7 @@ export function Navbar() {
                 className="rounded-lg object-cover"
               />
             </div>
-            <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
+            <span className="text-xl lg:text-2xl font-bold text-foreground" style={{ fontFamily: 'var(--font-outfit)' }}>
               PayRelief
             </span>
           </Link>
