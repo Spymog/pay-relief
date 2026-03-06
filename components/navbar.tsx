@@ -29,10 +29,7 @@ export function Navbar() {
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, delay: 0.1 }}
+    <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
@@ -143,6 +140,6 @@ export function Navbar() {
           </motion.div>
         )}
       </nav>
-    </motion.header>
+    </header>
   )
 }
