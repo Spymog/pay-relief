@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Cormorant_Garamond, Outfit } from 'next/font/google'
+import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { AnnouncementBar } from '@/components/announcement-bar'
@@ -16,12 +16,6 @@ const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
   variable: '--font-cormorant-garamond',
   weight: ['400', '500', '600', '700']
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: '--font-outfit',
-  weight: ['600', '700', '800']
 });
 
 export const metadata: Metadata = {
@@ -53,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${cormorantGaramond.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${cormorantGaramond.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
         <AnnouncementBar />
         <Navbar />
