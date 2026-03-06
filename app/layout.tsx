@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
+import { DM_Sans, Cormorant_Garamond, Outfit } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import { AnnouncementBar } from '@/components/announcement-bar'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 
@@ -49,7 +48,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${cormorantGaramond.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
-        <AnnouncementBar />
         <Navbar />
         <main className="min-h-screen">
           {children}
