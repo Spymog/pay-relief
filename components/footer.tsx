@@ -36,13 +36,15 @@ export function Footer() {
           <div className="space-y-8">
             {/* Logo */}
             <Link href="/for-debtors" className="flex items-center gap-2.5 group">
-              <Image
-                src="/images/pay-relief-logo.png"
-                alt="PayRelief logo"
-                width={44}
-                height={44}
-                className="rounded-lg transition-transform group-hover:scale-105 brightness-110"
-              />
+              <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
+                <Image
+                  src="/images/pay-relief-logo.png"
+                  alt="PayRelief logo"
+                  fill
+                  sizes="44px"
+                  className="rounded-lg object-cover brightness-110"
+                />
+              </div>
               <span className="font-serif text-xl lg:text-2xl font-semibold">
                 PayRelief
               </span>

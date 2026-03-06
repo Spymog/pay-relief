@@ -44,13 +44,15 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/for-debtors" className="flex items-center gap-2.5 group">
-            <Image
-              src="/images/pay-relief-logo.png"
-              alt="PayRelief logo"
-              width={44}
-              height={44}
-              className="rounded-lg transition-transform group-hover:scale-105"
-            />
+            <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
+              <Image
+                src="/images/pay-relief-logo.png"
+                alt="PayRelief logo"
+                fill
+                sizes="44px"
+                className="rounded-lg object-cover"
+              />
+            </div>
             <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
               PayRelief
             </span>
