@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
-import { PhoneCall, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -34,12 +35,16 @@ export function Footer() {
           {/* Left Column - Logo & Links */}
           <div className="space-y-8">
             {/* Logo */}
-            <Link href="/for-debtors" className="flex items-center gap-2 group">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-foreground text-primary transition-transform group-hover:scale-105">
-                <PhoneCall className="h-5 w-5" />
-              </div>
+            <Link href="/for-debtors" className="flex items-center gap-2.5 group">
+              <Image
+                src="/images/pay-relief-logo.png"
+                alt="PayRelief logo"
+                width={44}
+                height={44}
+                className="rounded-lg transition-transform group-hover:scale-105 brightness-110"
+              />
               <span className="font-serif text-xl lg:text-2xl font-semibold">
-                NegotiateNow
+                PayRelief
               </span>
             </Link>
 
@@ -69,7 +74,7 @@ export function Footer() {
                 Get notified when we launch
               </h3>
               <p className="text-primary-foreground/70 text-sm">
-                Join the waitlist and be the first to know when NegotiateNow goes live.
+                Join the waitlist and be the first to know when PayRelief goes live.
               </p>
             </div>
 
@@ -109,7 +114,7 @@ export function Footer() {
         {/* Disclaimer */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20">
           <p className="text-xs text-primary-foreground/50 text-center">
-            Not a law firm. A financial advocacy service. © {new Date().getFullYear()} NegotiateNow. All rights reserved.
+            Not a law firm. A financial advocacy service. © {new Date().getFullYear()} PayRelief. All rights reserved.
           </p>
         </div>
       </div>

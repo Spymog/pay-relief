@@ -19,8 +19,8 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: 'NegotiateNow — Financial Advocacy Platform',
-  description: 'NegotiateNow is a financial advocacy platform helping debtors, counselors, and lenders negotiate better outcomes.',
+  title: 'PayRelief — Financial Advocacy Platform',
+  description: 'PayRelief is a financial advocacy platform helping debtors, counselors, and lenders negotiate better outcomes.',
   generator: 'v0.app',
   icons: {
     icon: [

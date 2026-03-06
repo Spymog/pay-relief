@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
-import { PhoneCall, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -42,12 +43,16 @@ export function Navbar() {
       <nav className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/for-debtors" className="flex items-center gap-2 group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-105">
-              <PhoneCall className="h-5 w-5" />
-            </div>
+          <Link href="/for-debtors" className="flex items-center gap-2.5 group">
+            <Image
+              src="/images/pay-relief-logo.png"
+              alt="PayRelief logo"
+              width={44}
+              height={44}
+              className="rounded-lg transition-transform group-hover:scale-105"
+            />
             <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
-              NegotiateNow
+              PayRelief
             </span>
           </Link>
 

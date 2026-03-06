@@ -14,7 +14,7 @@ export function AnnouncementBar() {
       <p className="text-sm font-medium flex items-center justify-center gap-2">
         <Rocket className="h-4 w-4" />
         <span>
-          NegotiateNow is launching soon — 
+          PayRelief is launching soon — 
           <a href="#waitlist" className="underline underline-offset-2 hover:text-accent transition-colors ml-1">
             Join the waitlist and get 3 months free.
           </a>
