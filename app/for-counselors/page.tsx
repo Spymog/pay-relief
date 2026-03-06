@@ -1,21 +1,31 @@
 import type { Metadata } from "next"
+import { CounselorsHero } from '@/components/sections/counselors-hero'
+import { CounselorsplatformPreview } from '@/components/sections/counselors-platform-preview'
+import { CounselorsHowItWorks } from '@/components/sections/counselors-how-it-works'
+import { CounselorsPerkss } from '@/components/sections/counselors-perks'
+import { CounselorsSpecializations } from '@/components/sections/counselors-specializations'
+import { CounselorsEarnings } from '@/components/sections/counselors-earnings'
+import { CounselorsApplyForm } from '@/components/sections/counselors-apply-form'
+import { CounselorsFAQ } from '@/components/sections/counselors-faq'
+import { CounselorsFinalCTA } from '@/components/sections/counselors-final-cta'
 
 export const metadata: Metadata = {
-  title: "For Counselors — NegotiateNow",
-  description: "Empower your clients with better negotiation tools. NegotiateNow gives counselors the resources they need.",
+  title: "For Counselors — PayRelief",
+  description: "Join our founding cohort of elite financial counselors. Get 0% platform fees for 6 months, featured placement, and direct input on platform features.",
 }
 
 export default function ForCounselorsPage() {
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">
-      <div className="max-w-3xl mx-auto text-center">
-        <h1 className="font-serif text-4xl lg:text-5xl font-semibold text-foreground mb-4 text-balance">
-          For Counselors
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Page content coming soon.
-        </p>
-      </div>
+    <div className="w-full">
+      <CounselorsHero />
+      <CounselorsplatformPreview />
+      <CounselorsHowItWorks />
+      <CounselorsPerkss />
+      <CounselorsSpecializations />
+      <CounselorsEarnings />
+      <CounselorsApplyForm />
+      <CounselorsFAQ />
+      <CounselorsFinalCTA />
     </div>
   )
 }
