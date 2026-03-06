@@ -1,21 +1,29 @@
 import type { Metadata } from "next"
+import { DebtorsHero } from '@/components/sections/debtors-hero'
+import { DebtorsPainPoints } from '@/components/sections/debtors-pain-points'
+import { DebtorsHowItWorks } from '@/components/sections/debtors-how-it-works'
+import { DebtorsPerks } from '@/components/sections/debtors-perks'
+import { DebtorsSocialProof } from '@/components/sections/debtors-social-proof'
+import { DebtorsSignup } from '@/components/sections/debtors-signup'
+import { DebtorsFounderNote } from '@/components/sections/debtors-founder-note'
+import { DebtorsFAQ } from '@/components/sections/debtors-faq'
 
 export const metadata: Metadata = {
-  title: "For Debtors — NegotiateNow",
-  description: "Take control of your debt with professional advocacy. NegotiateNow helps you negotiate better terms with creditors.",
+  title: "For Debtors — PayRelief",
+  description: "Negotiate your debt with confidence. Expert strategies + AI-powered insights to settle your debts faster and save thousands.",
 }
 
 export default function ForDebtorsPage() {
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">
-      <div className="max-w-3xl mx-auto text-center">
-        <h1 className="font-serif text-4xl lg:text-5xl font-semibold text-foreground mb-4 text-balance">
-          For Debtors
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Page content coming soon.
-        </p>
-      </div>
+    <div className="w-full">
+      <DebtorsHero />
+      <DebtorsPainPoints />
+      <DebtorsHowItWorks />
+      <DebtorsPerks />
+      <DebtorsSocialProof />
+      <DebtorsFounderNote />
+      <DebtorsFAQ />
+      <DebtorsSignup />
     </div>
   )
 }
