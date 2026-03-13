@@ -1,32 +1,32 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, Zap, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useSignup } from '@/hooks/use-signup'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Zap, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useSignup } from "@/hooks/use-signup";
 
 export function DebtorsHero() {
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const { signup, isLoading, error } = useSignup()
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const { signup, isLoading, error } = useSignup();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
+    e.preventDefault();
+    if (!email) return;
 
     const result = await signup({
       email,
-      signup_type: 'debtor',
-    })
+      signup_type: "debtor",
+    });
 
     if (result.success) {
-      setSubmitted(true)
-      setEmail('')
-      setTimeout(() => setSubmitted(false), 3000)
+      setSubmitted(true);
+      setEmail("");
+      setTimeout(() => setSubmitted(false), 3000);
     }
-  }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-8 pb-20 px-4 overflow-hidden">
@@ -46,7 +46,7 @@ export function DebtorsHero() {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         {/* Badge */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -54,13 +54,13 @@ export function DebtorsHero() {
         >
           <Zap className="h-4 w-4 text-accent" />
           <span className="text-sm font-medium text-accent">Coming Soon</span>
-        </motion.div>
+        </motion.div> */}
 
         {/* Main headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
           className="font-serif text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
         >
           Negotiate Your Debt With Confidence
@@ -70,17 +70,18 @@ export function DebtorsHero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
           className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-2xl mx-auto"
         >
-          Expert negotiation strategies combined with AI-powered insights to help you settle your debts faster and save thousands.
+          Expert negotiation strategies combined with AI-powered insights to
+          help you settle your debts faster and save thousands.
         </motion.p>
 
         {/* Email signup form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
           className="mb-12 max-w-xl mx-auto w-full"
         >
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -98,7 +99,7 @@ export function DebtorsHero() {
                 type="submit"
                 size="lg"
                 disabled={isLoading || submitted}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 h-12 flex-shrink-0 disabled:opacity-50"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 h-12 flex-shrink-0 disabled:opacity-50 hover:cursor-pointer"
               >
                 {isLoading ? (
                   <>
@@ -135,12 +136,12 @@ export function DebtorsHero() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
           className="text-sm text-foreground/60"
         >
           Join 5,000+ people waiting to take control of their debt
         </motion.p>
       </div>
     </section>
-  )
+  );
 }

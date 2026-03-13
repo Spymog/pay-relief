@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { motion } from "framer-motion"
-import { ArrowRight, AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useSignup } from "@/hooks/use-signup"
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useSignup } from "@/hooks/use-signup";
 
 const footerLinks = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
   { href: "/fdcpa-notice", label: "FDCPA Notice" },
   { href: "/contact", label: "Contact" },
-]
+];
 
 export function Footer() {
-  const [email, setEmail] = useState("")
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const { signup, isLoading, error } = useSignup()
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { signup, isLoading, error } = useSignup();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
+    e.preventDefault();
+    if (!email) return;
 
     const result = await signup({
       email,
-      signup_type: 'debtor',
-    })
+      signup_type: "debtor",
+    });
 
     if (result.success) {
-      setIsSubmitted(true)
-      setEmail("")
-      setTimeout(() => setIsSubmitted(false), 3000)
+      setIsSubmitted(true);
+      setEmail("");
+      setTimeout(() => setIsSubmitted(false), 3000);
     }
-  }
+  };
 
   return (
     <footer id="waitlist" className="bg-primary text-primary-foreground">
@@ -44,14 +44,18 @@ export function Footer() {
           {/* Left Column - Logo & Links */}
           <div className="space-y-8">
             {/* Logo */}
-            <Link href="/for-debtors" className="flex items-center gap-2.5 group">
+            <Link
+              href="/for-debtors"
+              className="flex items-center gap-2.5 group"
+            >
               <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
                 <Image
                   src="/images/pay-relief-logo.png"
                   alt="PayRelief logo"
                   fill
                   sizes="44px"
-                  className="rounded-lg object-cover brightness-110"
+                  className="rounded-md object-cover brightness-110"
+                  // className="rounded-lg object-cover brightness-110"
                 />
               </div>
               <span className="font-serif text-xl lg:text-2xl font-semibold">
@@ -85,7 +89,8 @@ export function Footer() {
                 Get notified when we launch
               </h3>
               <p className="text-primary-foreground/70 text-sm">
-                Join the waitlist and be the first to know when PayRelief goes live.
+                Join the waitlist and be the first to know when PayRelief goes
+                live.
               </p>
             </div>
 
@@ -144,10 +149,11 @@ export function Footer() {
         {/* Disclaimer */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20">
           <p className="text-xs text-primary-foreground/50 text-center">
-            Not a law firm. A financial advocacy service. © {new Date().getFullYear()} PayRelief. All rights reserved.
+            Not a law firm. A financial advocacy service. ©{" "}
+            {new Date().getFullYear()} PayRelief. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
