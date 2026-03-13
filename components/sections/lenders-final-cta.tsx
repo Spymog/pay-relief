@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function LendersFinalCTA() {
   return (
@@ -24,7 +24,8 @@ export function LendersFinalCTA() {
           </h2>
 
           <p className="text-lg lg:text-xl text-primary-foreground/80 mb-8 text-balance">
-            Limited institutional partner slots remaining. Secure your spot and help shape the future of debt resolution.
+            Limited institutional partner slots remaining. Secure your spot and
+            help shape the future of debt resolution.
           </p>
 
           <motion.div
@@ -33,13 +34,16 @@ export function LendersFinalCTA() {
             transition={{ delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold">
+            <Button
+              size="lg"
+              className="bg-accent hover:bg-accent/90 text-primary font-semibold"
+            >
               Become a Launch Partner
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground/50 text-primary-foreground hover:bg-primary-foreground/10">
+            {/* <Button size="lg" variant="outline" className="border-primary-foreground/50 text-primary-foreground hover:bg-primary-foreground/10">
               Request a Preview Call
-            </Button>
+            </Button> */}
           </motion.div>
 
           <motion.p
@@ -48,10 +52,11 @@ export function LendersFinalCTA() {
             transition={{ delay: 0.4 }}
             className="text-sm text-primary-foreground/70"
           >
-            Enterprise onboarding available. SOC 2 compliant. Limited launch partner slots remaining.
+            Enterprise onboarding available. SOC 2 compliant. Limited launch
+            partner slots remaining.
           </motion.p>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

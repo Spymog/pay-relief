@@ -25,7 +25,7 @@ export default function ForCounselorsPage() {
       <CounselorsEarnings />
       <CounselorsApplyForm />
       {/* <CounselorsFAQ /> */}
-      <CounselorsFinalCTA />
+      {/* <CounselorsFinalCTA /> */}
     </div>
   );
 }

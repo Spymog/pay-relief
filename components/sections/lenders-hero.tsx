@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { ArrowRight, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { motion } from "framer-motion";
+import { ArrowRight, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function LendersHero() {
   return (
-    <section className="relative bg-background text-foreground overflow-hidden">
+    <section className="relative bg-background text-foreground overflow-hidden min-h-screen">
       {/* Background accent */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full -mr-48 -mt-48" />
-      
-      <div className="relative container mx-auto px-4 lg:px-8 py-20 lg:py-32">
+      {/*  */}
+      <div className="relative container mx-auto mt-[150px] px-4 lg:px-8 py-20 lg:py-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,9 @@ export function LendersHero() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20">
               <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm font-semibold text-accent">Launching Soon · Now Accepting Institutional Partners</span>
+              <span className="text-sm font-semibold text-accent">
+                Launching Soon · Now Accepting Institutional Partners
+              </span>
             </div>
           </motion.div>
 
@@ -47,7 +49,9 @@ export function LendersHero() {
             transition={{ delay: 0.3 }}
             className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance"
           >
-            A compliant negotiation platform connecting your institution with pre-screened debtors seeking structured resolutions. Better outcomes. Less legal overhead. Stronger customer relationships.
+            A compliant negotiation platform connecting your institution with
+            pre-screened debtors seeking structured resolutions. Better
+            outcomes. Less legal overhead. Stronger customer relationships.
           </motion.p>
 
           {/* CTAs */}
@@ -57,7 +61,10 @@ export function LendersHero() {
             transition={{ delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold">
+            <Button
+              size="lg"
+              className="bg-accent hover:bg-accent/90 text-primary font-semibold"
+            >
               Become a Launch Partner
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -74,19 +81,24 @@ export function LendersHero() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              'FDCPA Compliant',
-              'Pre-Screened Debtors',
-              'No Litigation Required',
-              'SOC 2 Infrastructure'
+              "FDCPA Compliant",
+              "Pre-Screened Debtors",
+              "No Litigation Required",
+              "SOC 2 Infrastructure",
             ].map((badge, index) => (
-              <div key={index} className="flex items-center gap-2 p-3 bg-secondary/50 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center gap-2 p-3 bg-secondary/50 rounded-lg"
+              >
                 <Check className="h-5 w-5 text-accent flex-shrink-0" />
-                <span className="text-sm font-medium text-foreground">{badge}</span>
+                <span className="text-sm font-medium text-foreground">
+                  {badge}
+                </span>
               </div>
             ))}
           </motion.div>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

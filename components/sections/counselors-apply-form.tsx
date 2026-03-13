@@ -1,61 +1,65 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
-import { useSignup } from '@/hooks/use-signup'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CheckCircle2, AlertCircle } from "lucide-react";
+import { useSignup } from "@/hooks/use-signup";
 
 export function CounselorsApplyForm() {
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    certification: '',
-    specializations: '',
-    experience: '',
-    reason: '',
-  })
-  const { signup, isLoading, error } = useSignup()
+    fullName: "",
+    email: "",
+    certification: "",
+    specializations: "",
+    experience: "",
+    reason: "",
+  });
+  const { signup, isLoading, error } = useSignup();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const result = await signup({
       email: formData.email,
-      signup_type: 'counselor',
+      signup_type: "counselor",
       full_name: formData.fullName,
       certification: formData.certification,
       specializations: formData.specializations,
       experience: formData.experience,
       reason_for_joining: formData.reason,
-    })
+    });
 
     if (result.success) {
-      setSubmitted(true)
+      setSubmitted(true);
       setFormData({
-        fullName: '',
-        email: '',
-        certification: '',
-        specializations: '',
-        experience: '',
-        reason: '',
-      })
-      setTimeout(() => setSubmitted(false), 3000)
+        fullName: "",
+        email: "",
+        certification: "",
+        specializations: "",
+        experience: "",
+        reason: "",
+      });
+      setTimeout(() => setSubmitted(false), 3000);
     }
-  }
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
-    <section id="apply-form" className="w-full bg-secondary/30 py-20 lg:py-32">
+    <section id="apply-form" className="w-full bg-background py-20 lg:py-32">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Headline */}
-        <motion.div 
+        <motion.div
           className="max-w-2xl mx-auto text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -66,7 +70,8 @@ export function CounselorsApplyForm() {
             Apply in Under 3 Minutes
           </h2>
           <p className="text-lg text-foreground/60">
-            Tell us about your practice and we'll review your application within 48 hours.
+            Tell us about your practice and we'll review your application within
+            48 hours.
           </p>
         </motion.div>
 
@@ -85,7 +90,8 @@ export function CounselorsApplyForm() {
                 Application Submitted!
               </h3>
               <p className="text-foreground/60">
-                We'll review your application and get back to you within 48 hours.
+                We'll review your application and get back to you within 48
+                hours.
               </p>
             </div>
           ) : (
@@ -215,18 +221,19 @@ export function CounselorsApplyForm() {
                     Submitting...
                   </>
                 ) : (
-                  'Submit Application'
+                  "Submit Application"
                 )}
               </Button>
 
               {/* Fine Print */}
               <p className="text-xs text-foreground/50 text-center">
-                Applications reviewed within 48 hours. NFCC, AFCPE, and NACCC credentials accepted.
+                Applications reviewed within 48 hours. NFCC, AFCPE, and NACCC
+                credentials accepted.
               </p>
             </form>
           )}
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
