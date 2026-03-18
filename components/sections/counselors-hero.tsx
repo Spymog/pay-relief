@@ -55,15 +55,25 @@ export function CounselorsHero() {
           </motion.p>
 
           {/* Incentive Badge */}
-          <motion.div
+          {/* <motion.div
             className="inline-flex items-center gap-2 bg-accent text-primary px-6 py-3 rounded-lg mb-8 font-semibold text-sm lg:text-base"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
           >
             <Award className="h-5 w-5" />
-            {/* Founding counselors get 0% platform fees for 6 months */}
             Early signup promotion here!
+          </motion.div> */}
+          <motion.div
+            className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Award className="h-4 w-4" />
+            <span className="text-sm font-semibold">
+              Now Accepting Founding Counselors · Limited Spots
+            </span>
           </motion.div>
 
           {/* CTAs */}
@@ -83,12 +93,12 @@ export function CounselorsHero() {
             >
               Apply as a Founding Counselor
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-base font-semibold rounded-lg"
             >
               Learn More
-            </Button>
+            </Button> */}
           </motion.div>
 
           {/* Trust indicator */}
