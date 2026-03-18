@@ -31,22 +31,29 @@ export function Navbar() {
   return (
     <header
       className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-40 bg-background",
+        isScrolled ? "border-b border-border shadow-sm duration-90" : "",
+      )}
+    >
+      {/* <header
+      className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
           ? "bg-background/80 backdrop-blur-lg border-b border-border shadow-sm"
           : "bg-transparent",
       )}
-    >
+    > */}
       <nav className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/for-debtors" className="flex items-center gap-2.5 group">
+            {/* <div className="relative aspect-119/130 w-10 ] "> */}
             <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
               <Image
                 src="/images/pay-relief-logo.png"
                 alt="PayRelief logo"
                 fill
-                sizes="44px"
+                // sizes="44px"
                 className="rounded-md object-cover"
               />
             </div>
@@ -81,14 +88,14 @@ export function Navbar() {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <Button
               asChild
               className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium px-6"
             >
               <a href="#waitlist">Join the Waitlist</a>
             </Button>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <button

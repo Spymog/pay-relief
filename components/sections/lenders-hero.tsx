@@ -18,7 +18,7 @@ export function LendersHero() {
           className="max-w-4xl mx-auto text-center"
         >
           {/* Eyebrow */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
@@ -30,7 +30,7 @@ export function LendersHero() {
                 Launching Soon · Now Accepting Institutional Partners
               </span>
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Headline */}
           <motion.h1
@@ -68,13 +68,13 @@ export function LendersHero() {
               Become a Launch Partner
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline">
+            {/* <Button size="lg" variant="outline">
               Request a Preview
-            </Button>
+            </Button> */}
           </motion.div>
 
           {/* Trust Badges */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -96,7 +96,7 @@ export function LendersHero() {
                 </span>
               </div>
             ))}
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </div>
     </section>

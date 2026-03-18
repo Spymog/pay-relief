@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Award } from 'lucide-react'
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Award } from "lucide-react";
 
 export function CounselorsHero() {
   return (
@@ -14,14 +14,14 @@ export function CounselorsHero() {
       </div>
 
       <div className="relative container mx-auto px-4 lg:px-8 py-20 lg:py-32 flex items-center justify-center min-h-screen">
-        <motion.div 
+        <motion.div
           className="max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {/* Eyebrow */}
-          <motion.div 
+          {/* <motion.div 
             className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -29,54 +29,62 @@ export function CounselorsHero() {
           >
             <Award className="h-4 w-4" />
             <span className="text-sm font-semibold">Now Accepting Founding Counselors · Limited Spots</span>
-          </motion.div>
+          </motion.div> */}
 
           {/* Headline */}
-          <motion.h1 
+          <motion.h1
             className="font-serif text-5xl lg:text-7xl font-bold text-foreground mb-6 text-balance leading-tight"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            Be One of the First Counselors on the Platform That's Changing Debt Relief.
+            Be One of the First Counselors on the Platform That's Changing Debt
+            Relief.
           </motion.h1>
 
           {/* Subtext */}
-          <motion.p 
+          <motion.p
             className="text-lg lg:text-xl text-foreground/70 mb-8 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Join our founding cohort of elite financial counselors. Help shape the future of debt negotiation while gaining exclusive benefits and early access before our public launch.
+            Join our founding cohort of elite financial counselors. Help shape
+            the future of debt negotiation while gaining exclusive benefits and
+            early access before our public launch.
           </motion.p>
 
           {/* Incentive Badge */}
-          <motion.div 
+          <motion.div
             className="inline-flex items-center gap-2 bg-accent text-primary px-6 py-3 rounded-lg mb-8 font-semibold text-sm lg:text-base"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
           >
             <Award className="h-5 w-5" />
-            Founding counselors get 0% platform fees for 6 months
+            {/* Founding counselors get 0% platform fees for 6 months */}
+            Early signup promotion here!
           </motion.div>
 
           {/* CTAs */}
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Button 
+            <Button
               className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-base font-semibold rounded-lg"
-              onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document
+                  .getElementById("apply-form")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Apply as a Founding Counselor
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-base font-semibold rounded-lg"
             >
               Learn More
@@ -84,7 +92,7 @@ export function CounselorsHero() {
           </motion.div>
 
           {/* Trust indicator */}
-          <motion.p 
+          <motion.p
             className="text-sm text-foreground/50 mt-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -95,5 +103,5 @@ export function CounselorsHero() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -12,7 +12,7 @@ export function DebtorsHero() {
   const [submitted, setSubmitted] = useState(false);
   const { signup, isLoading, error } = useSignup();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!email) return;
 
@@ -60,7 +60,7 @@ export function DebtorsHero() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="font-serif text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight"
         >
           Negotiate Your Debt With Confidence
@@ -70,7 +70,7 @@ export function DebtorsHero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-2xl mx-auto"
         >
           Expert negotiation strategies combined with AI-powered insights to
@@ -81,7 +81,7 @@ export function DebtorsHero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="mb-12 max-w-xl mx-auto w-full"
         >
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -136,7 +136,7 @@ export function DebtorsHero() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="text-sm text-foreground/60"
         >
           Join 5,000+ people waiting to take control of their debt

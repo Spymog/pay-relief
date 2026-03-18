@@ -83,7 +83,7 @@ export function Footer() {
           </div>
 
           {/* Right Column - Email Capture */}
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <div>
               <h3 className="font-serif text-xl lg:text-2xl font-semibold mb-2">
                 Get notified when we launch
@@ -143,7 +143,7 @@ export function Footer() {
                 </motion.div>
               )}
             </form>
-          </div>
+          </div> */}
         </div>
 
         {/* Disclaimer */}
