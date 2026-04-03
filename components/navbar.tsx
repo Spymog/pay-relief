@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { href: "/for-debtors", label: "For Debtors" },
+  { href: "/deferment-notification", label: "Deferment" },
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
 ];
@@ -69,20 +70,36 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-accent relative py-2",
+                  "text-sm font-medium hover:text-accent relative py-2",
+                  // "text-sm font-medium transition-colors hover:text-accent relative py-2",
                   pathname === link.href
                     ? "text-foreground"
                     : "text-muted-foreground",
                 )}
               >
                 {link.label}
-                {pathname === link.href && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
+                <AnimatePresence>
+                  {pathname === link.href && (
+                    // <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                    />
+                    // <motion.div
+                    //   layoutId="navbar-indicator"
+                    //   className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                    //   transition={{
+                    //     type: "spring",
+                    //     stiffness: 500,
+                    //     damping: 30,
+                    //   }}
+                    // />
+                  )}
+                </AnimatePresence>
               </Link>
             ))}
           </div>

@@ -1,63 +1,71 @@
-import { createClient } from '@supabase/supabase-js'
-import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from "@supabase/supabase-js";
+import { NextRequest, NextResponse } from "next/server";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables')
+  throw new Error("Missing Supabase environment variables");
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { email, signup_type, full_name, certification, specializations, experience, reason_for_joining } = body
+    const body = await request.json();
+    const {
+      email,
+      signup_type,
+      full_name,
+      certification,
+      specializations,
+      experience,
+      reason_for_joining,
+    } = body;
 
     // Validate required fields
     if (!email || !signup_type) {
       return NextResponse.json(
-        { error: 'Email and signup_type are required' },
-        { status: 400 }
-      )
+        { error: "Email and signup_type are required" },
+        { status: 400 },
+      );
     }
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
+        { error: "Invalid email format" },
+        { status: 400 },
+      );
     }
 
     // Validate signup_type
-    const validTypes = ['debtor', 'counselor', 'lender']
+    const validTypes = ["debtor", "counselor", "lender"];
     if (!validTypes.includes(signup_type)) {
       return NextResponse.json(
-        { error: 'Invalid signup_type' },
-        { status: 400 }
-      )
+        { error: "Invalid signup_type" },
+        { status: 400 },
+      );
     }
 
     // Check if email already exists
     const { data: existingSignup } = await supabase
-      .from('signups')
-      .select('email')
-      .eq('email', email)
-      .single()
+      .from("signups")
+      .select("email")
+      .eq("email", email)
+      .single();
 
     if (existingSignup) {
       return NextResponse.json(
-        { error: 'This email is already registered' },
-        { status: 409 }
-      )
+        { error: "This email is already registered" },
+        { status: 409 },
+      );
     }
 
     // Insert the signup
     const { data, error } = await supabase
-      .from('signups')
+      .from("signups")
       .insert([
         {
           email,
@@ -67,27 +75,24 @@ export async function POST(request: NextRequest) {
           specializations: specializations || null,
           experience: experience || null,
           reason_for_joining: reason_for_joining || null,
-        }
+        },
       ])
-      .select()
+      .select();
 
     if (error) {
-      console.error('Supabase error:', error)
+      console.error("Supabase error:", error);
       return NextResponse.json(
-        { error: 'Failed to save signup' },
-        { status: 500 }
-      )
+        { error: "Failed to save signup" },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json(
-      { success: true, data },
-      { status: 201 }
-    )
+    return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
-    console.error('API error:', error)
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
