@@ -20,15 +20,15 @@ export function DefermentHero() {
   async function generateToken() {
     const response = await fetch("../../api/link", { method: "POST" });
     const data = await response.json();
-    console.log("Link Token data:\n", data);
-    console.log("Setting link_token:\n", data.link_token);
+    // console.log("Link Token data:\n", data);
+    // console.log("Setting link_token:\n", data.link_token);
     setLinkToken(data.link_token);
   }
 
   const { open, ready } = usePlaidLink({
     token: linkToken,
     onSuccess: async (public_token, metadata) => {
-      console.log("Success:", public_token, metadata);
+      // console.log("Success:", public_token, metadata);
       setPublicToken(public_token);
 
       try {
@@ -41,14 +41,14 @@ export function DefermentHero() {
         });
 
         const data = await response.json();
-        console.log("Exchange response:\n", data);
-        console.log("Item ID:\n", data.item_id);
+        // console.log("Exchange response:\n", data);
+        // console.log("Item ID:\n", data.item_id);
       } catch (error) {
-        console.error("Error exchanging public token:\n", error);
+        // console.error("Error exchanging public token:\n", error);
       }
     },
     onLoad: () => {
-      console.log("onLoad test");
+      // console.log("onLoad test");
       setloadingLink(false);
     },
   });
