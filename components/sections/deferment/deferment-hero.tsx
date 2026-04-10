@@ -4,6 +4,7 @@ import { ArrowRight, Zap, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePlaidLink } from "react-plaid-link";
+import BankAccountForm from "@/components/UserBankInfo/BankAccountForm";
 
 interface LinkProps {
   linkToken: string | null;
@@ -20,15 +21,15 @@ export function DefermentHero() {
   async function generateToken() {
     const response = await fetch("../../api/link", { method: "POST" });
     const data = await response.json();
-    // console.log("Link Token data:\n", data);
-    // console.log("Setting link_token:\n", data.link_token);
+    console.log("Link Token data:\n", data);
+    console.log("Setting link_token:\n", data.link_token);
     setLinkToken(data.link_token);
   }
 
   const { open, ready } = usePlaidLink({
     token: linkToken,
     onSuccess: async (public_token, metadata) => {
-      // console.log("Success:", public_token, metadata);
+      console.log("Success:", public_token, metadata);
       setPublicToken(public_token);
 
       try {
@@ -41,10 +42,10 @@ export function DefermentHero() {
         });
 
         const data = await response.json();
-        // console.log("Exchange response:\n", data);
-        // console.log("Item ID:\n", data.item_id);
+        console.log("Exchange response:\n", data);
+        console.log("Item ID:\n", data.item_id);
       } catch (error) {
-        // console.error("Error exchanging public token:\n", error);
+        console.error("Error exchanging public token:\n", error);
       }
     },
     onLoad: () => {
@@ -85,7 +86,23 @@ export function DefermentHero() {
               <>Sign In to Your Bank</>
             )}
           </Button>
-          <form></form>
+          <BankAccountForm />
+          {/* <form className="border">
+            <label>Account Number</label>
+            <input className="border" />
+
+            <label>Phone Number</label>
+            <input className="border" />
+
+            <label>Account Address</label>
+            <input className="border" />
+
+            <label>Credit Card Last 4 Digits</label>
+            <input className="border" />
+
+            <label>SSN</label>
+            <input className="border" />
+          </form> */}
         </div>
       </div>
     </section>
