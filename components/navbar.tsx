@@ -9,17 +9,25 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
+import { useUser } from "@/context/UserProvider";
+
 const navLinks = [
   { href: "/for-debtors", label: "For Debtors" },
   { href: "/deferment-notification", label: "Deferment" },
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
+  // { href: "/login", label: "Login" },
+  { href: "/signup", label: "Sign Up" },
 ];
 
 export function Navbar() {
+  console.log("Navbar RENDER");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const pathname = usePathname();
+
+  const currentUser = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,6 +110,7 @@ export function Navbar() {
                 </AnimatePresence>
               </Link>
             ))}
+            {currentUser ? "Signed In" : "Not Signed In"}
           </div>
 
           {/* CTA Button */}
