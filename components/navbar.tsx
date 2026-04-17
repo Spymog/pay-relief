@@ -5,19 +5,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import { useUser } from "@/context/UserProvider";
+
+import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "/for-debtors", label: "For Debtors" },
   { href: "/deferment-notification", label: "Deferment" },
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
-  // { href: "/login", label: "Login" },
-  { href: "/signup", label: "Sign Up" },
 ];
 
 export function Navbar() {
@@ -26,7 +26,6 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const pathname = usePathname();
-
   const currentUser = useUser();
 
   useEffect(() => {
@@ -37,6 +36,14 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  async function handleSignOut() {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      console.log("User Signed Out");
+    }
+  }
+
   return (
     <header
       className={cn(
@@ -44,25 +51,15 @@ export function Navbar() {
         isScrolled ? "border-b border-border shadow-sm duration-90" : "",
       )}
     >
-      {/* <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-border shadow-sm"
-          : "bg-transparent",
-      )}
-    > */}
       <nav className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/for-debtors" className="flex items-center gap-2.5 group">
-            {/* <div className="relative aspect-119/130 w-10 ] "> */}
             <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
               <Image
                 src="/images/pay-relief-logo.png"
                 alt="PayRelief logo"
                 fill
-                // sizes="44px"
                 className="rounded-md object-cover"
               />
             </div>
@@ -79,7 +76,6 @@ export function Navbar() {
                 href={link.href}
                 className={cn(
                   "text-sm font-medium hover:text-accent relative py-2",
-                  // "text-sm font-medium transition-colors hover:text-accent relative py-2",
                   pathname === link.href
                     ? "text-foreground"
                     : "text-muted-foreground",
@@ -88,7 +84,6 @@ export function Navbar() {
                 {link.label}
                 <AnimatePresence>
                   {pathname === link.href && (
-                    // <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />
                     <motion.div
                       key={link.href}
                       initial={{ opacity: 0 }}
@@ -97,31 +92,38 @@ export function Navbar() {
                       transition={{ duration: 0.15 }}
                       className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
                     />
-                    // <motion.div
-                    //   layoutId="navbar-indicator"
-                    //   className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                    //   transition={{
-                    //     type: "spring",
-                    //     stiffness: 500,
-                    //     damping: 30,
-                    //   }}
-                    // />
                   )}
                 </AnimatePresence>
               </Link>
             ))}
-            {currentUser ? "Signed In" : "Not Signed In"}
-          </div>
 
-          {/* CTA Button */}
-          {/* <div className="hidden md:block">
-            <Button
-              asChild
-              className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium px-6"
-            >
-              <a href="#waitlist">Join the Waitlist</a>
-            </Button>
-          </div> */}
+            {/* Auth — Desktop */}
+            {currentUser ? (
+              <>
+                <Button onClick={handleSignOut} className="cursor-pointer">
+                  Sign Out
+                </Button>
+                <Link
+                  href="/profile"
+                  className={cn(
+                    "text-muted-foreground hover:text-accent transition-colors",
+                    pathname === "/profile" && "text-foreground",
+                  )}
+                  aria-label="Go to profile"
+                >
+                  <UserCircle className="h-6 w-6" />
+                </Link>
+              </>
+            ) : (
+              <Button
+                asChild
+                size="sm"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium px-5"
+              >
+                <Link href="/login">Login</Link>
+              </Button>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -161,13 +163,36 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Auth — Mobile */}
               <div className="px-4 pt-2">
-                <Button
-                  asChild
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-medium"
-                >
-                  <a href="#waitlist">Join the Waitlist</a>
-                </Button>
+                {currentUser ? (
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors",
+                      pathname === "/profile"
+                        ? "bg-primary/10 text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    )}
+                  >
+                    <UserCircle className="h-5 w-5" />
+                    Profile
+                  </Link>
+                ) : (
+                  <Button
+                    asChild
+                    className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-medium"
+                  >
+                    <Link
+                      href="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </motion.div>
