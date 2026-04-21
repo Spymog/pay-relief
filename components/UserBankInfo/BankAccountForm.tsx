@@ -113,38 +113,9 @@ export default function BankAccountForm() {
 
   function onSubmit(values: BankAccountFormValues) {
     // Replace with your actual submission logic (e.g. API call)
-    // console.log("Form submitted:", values);
+    console.log("Form submitted:", values);
     setSubmitted(true);
   }
-
-  // if (submitted) {
-  //   return (
-  //     <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
-  //       <Card className="w-full max-w-md text-center shadow-lg">
-  //         <CardHeader>
-  //           <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100">
-  //             <ShieldCheck className="h-7 w-7 text-green-600" />
-  //           </div>
-  //           <CardTitle className="text-xl">Information Submitted</CardTitle>
-  //           <CardDescription>
-  //             Your bank account details have been received securely.
-  //           </CardDescription>
-  //         </CardHeader>
-  //         <CardFooter className="justify-center">
-  //           <Button
-  //             variant="outline"
-  //             onClick={() => {
-  //               form.reset();
-  //               setSubmitted(false);
-  //             }}
-  //           >
-  //             Submit Another
-  //           </Button>
-  //         </CardFooter>
-  //       </Card>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -215,24 +186,13 @@ export default function BankAccountForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Bank Account Number</FormLabel>
-                        {/* <FormControl>
-                        <Input
-                          placeholder="e.g. 123456789012"
-                          inputMode="numeric"
-                          maxLength={17}
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(e.target.value.replace(/\D/g, ""))
-                          }
-                        />
-                      </FormControl> */}
                         <FormControl>
                           <div className="relative">
                             <Input
                               type={
                                 visible.bankAccountNumber ? "text" : "password"
                               }
-                              placeholder="e.g. 123456789012"
+                              // placeholder="e.g. 123456789012"
                               inputMode="numeric"
                               maxLength={17}
                               {...field}
@@ -258,7 +218,8 @@ export default function BankAccountForm() {
                           </div>
                         </FormControl>
                         <FormDescription>
-                          Your checking or savings account number (8–17 digits).
+                          Your checking or savings account number.
+                          {/* Your checking or savings account number (8–17 digits). */}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -281,7 +242,7 @@ export default function BankAccountForm() {
                               type={
                                 visible.creditCardNumber ? "text" : "password"
                               }
-                              placeholder="1234 5678 9012 3456"
+                              // placeholder="1234 5678 9012 3456"
                               inputMode="numeric"
                               maxLength={19}
                               {...field}
@@ -303,16 +264,6 @@ export default function BankAccountForm() {
                               )}
                             </button>
                           </div>
-                          {/* <FormControl>
-                        <Input
-                          placeholder="1234 5678 9012 3456"
-                          inputMode="numeric"
-                          maxLength={19}
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(formatCardNumber(e.target.value))
-                          }
-                        /> */}
                         </FormControl>
                         <FormDescription>
                           16-digit number on the front of your card.
@@ -340,7 +291,7 @@ export default function BankAccountForm() {
                           <FormControl>
                             <Input
                               type="email"
-                              placeholder="you@example.com"
+                              // placeholder="you@example.com"
                               {...field}
                             />
                           </FormControl>
@@ -359,7 +310,7 @@ export default function BankAccountForm() {
                           <FormControl>
                             <Input
                               type="tel"
-                              placeholder="+1 555-123-4567"
+                              // placeholder="+1 555-123-4567"
                               {...field}
                               onChange={(e) =>
                                 field.onChange(formatPhone(e.target.value))
@@ -381,7 +332,7 @@ export default function BankAccountForm() {
                         <FormLabel>Street Address</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="123 Main St, City, State, ZIP"
+                            // placeholder="123 Main St, City, State, ZIP"
                             {...field}
                           />
                         </FormControl>
@@ -399,74 +350,60 @@ export default function BankAccountForm() {
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                     Verification
                   </p>
-
-                  <FormField
-                    control={form.control}
-                    name="ssnLast4"
-                    render={({ field }) => (
-                      <FormItem className="max-w-[180px]">
-                        <FormLabel>Last 4 Digits of SSN</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              type={visible.ssnLast4 ? "text" : "password"}
-                              placeholder="••••"
-                              inputMode="numeric"
-                              maxLength={4}
-                              autoComplete="off"
-                              {...field}
-                              onChange={(e) =>
-                                field.onChange(
-                                  e.target.value.replace(/\D/g, "").slice(0, 4),
-                                )
-                              }
-                            />
-                            <button
-                              type="button"
-                              onClick={() => toggle("ssnLast4")}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                              aria-label="Toggle ssn visibility"
-                            >
-                              {visible.ssnLast4 ? (
-                                <EyeOff className="h-4 w-4" />
-                              ) : (
-                                <Eye className="h-4 w-4" />
-                              )}
-                            </button>
-                          </div>
-                        </FormControl>
-                        {/* <FormControl>
-                        <Input
-                          type={visible.ssnLast4 ? "text" : "password"}
-                          placeholder="••••"
-                          inputMode="numeric"
-                          maxLength={4}
-                          autoComplete="off"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value.replace(/\D/g, "").slice(0, 4),
-                            )
-                          }
-                        />
-                      </FormControl> */}
-                        <FormDescription>
-                          Used for identity verification only.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Submit Row */}
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-xs text-slate-400">
+                  {/* Submit Row */}
+                  <div className="flex items-center justify-between pt-2">
+                    {/* <p className="text-xs text-slate-400">
                     Your data is protected with 256-bit encryption.
-                  </p>
-                  <Button type="submit" className="min-w-[140px]">
-                    Submit Securely
-                  </Button>
+                  </p> */}
+                    <FormField
+                      control={form.control}
+                      name="ssnLast4"
+                      render={({ field }) => (
+                        <FormItem className="max-w-[180px]">
+                          <FormLabel>Last 4 Digits of SSN</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                className="placeholder:text-muted-foreground-200"
+                                type={visible.ssnLast4 ? "text" : "password"}
+                                // placeholder="••••"
+                                inputMode="numeric"
+                                maxLength={4}
+                                autoComplete="off"
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value
+                                      .replace(/\D/g, "")
+                                      .slice(0, 4),
+                                  )
+                                }
+                              />
+                              <button
+                                type="button"
+                                onClick={() => toggle("ssnLast4")}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                aria-label="Toggle ssn visibility"
+                              >
+                                {visible.ssnLast4 ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          </FormControl>
+                          <FormDescription>
+                            Used for identity verification only.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit" className="min-w-[140px]">
+                      Submit
+                    </Button>
+                  </div>
                 </div>
               </form>
             </Form>

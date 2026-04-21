@@ -14,14 +14,13 @@ import { useUser } from "@/context/UserProvider";
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
-  { href: "/for-debtors", label: "For Debtors" },
   { href: "/deferment-notification", label: "Deferment" },
+  { href: "/for-debtors", label: "For Debtors" },
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
 ];
 
 export function Navbar() {
-  console.log("Navbar RENDER");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

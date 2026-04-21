@@ -87,22 +87,6 @@ export function DefermentHero() {
             )}
           </Button>
           <BankAccountForm />
-          {/* <form className="border">
-            <label>Account Number</label>
-            <input className="border" />
-
-            <label>Phone Number</label>
-            <input className="border" />
-
-            <label>Account Address</label>
-            <input className="border" />
-
-            <label>Credit Card Last 4 Digits</label>
-            <input className="border" />
-
-            <label>SSN</label>
-            <input className="border" />
-          </form> */}
         </div>
       </div>
     </section>
