@@ -64,6 +64,14 @@ const bankAccountSchema = z.object({
       "Enter a valid 16-digit card number",
     ),
 
+  // NEW
+  bankContactNumber: z
+    .string()
+    .regex(
+      /^\+?[\d\s\-().]{7,20}$/,
+      "Enter a valid phone number (e.g. +1 555-123-4567)",
+    ),
+
   email: z.string().email("Enter a valid email address"),
 
   ssnLast4: z
@@ -106,6 +114,7 @@ export default function BankAccountForm() {
       phoneNumber: "",
       address: "",
       creditCardNumber: "",
+      bankContactNumber: "", // NEW
       email: "",
       ssnLast4: "",
     },
@@ -226,52 +235,80 @@ export default function BankAccountForm() {
                     )}
                   />
 
-                  {/* Credit Card Number */}
-                  <FormField
-                    control={form.control}
-                    name="creditCardNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center gap-1.5">
-                          <CreditCard className="h-3.5 w-3.5 text-slate-500" />
-                          Credit Card Number
-                        </FormLabel>
-                        <FormControl>
-                          <div className="relative">
+                  {/* Credit Card Number + Bank Contact Number */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="creditCardNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex items-center gap-1.5">
+                            <CreditCard className="h-3.5 w-3.5 text-slate-500" />
+                            Credit Card Number
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                type={
+                                  visible.creditCardNumber ? "text" : "password"
+                                }
+                                inputMode="numeric"
+                                maxLength={19}
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    formatCardNumber(e.target.value),
+                                  )
+                                }
+                                className="pr-10"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => toggle("creditCardNumber")}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                aria-label="Toggle credit card number visibility"
+                              >
+                                {visible.creditCardNumber ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          </FormControl>
+                          <FormDescription>
+                            16-digit number on the front of your card.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* NEW — Bank Contact Number */}
+                    <FormField
+                      control={form.control}
+                      name="bankContactNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bank Contact Number</FormLabel>
+                          <FormControl>
                             <Input
-                              type={
-                                visible.creditCardNumber ? "text" : "password"
-                              }
-                              // placeholder="1234 5678 9012 3456"
+                              type="tel"
                               inputMode="numeric"
-                              maxLength={19}
                               {...field}
                               onChange={(e) =>
-                                field.onChange(formatCardNumber(e.target.value))
+                                field.onChange(formatPhone(e.target.value))
                               }
-                              className="pr-10"
                             />
-                            <button
-                              type="button"
-                              onClick={() => toggle("creditCardNumber")}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                              aria-label="Toggle credit card number visibility"
-                            >
-                              {visible.creditCardNumber ? (
-                                <EyeOff className="h-4 w-4" />
-                              ) : (
-                                <Eye className="h-4 w-4" />
-                              )}
-                            </button>
-                          </div>
-                        </FormControl>
-                        <FormDescription>
-                          16-digit number on the front of your card.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          </FormControl>
+                          <FormDescription>
+                            Contact number associated with your bank.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 {/* ── Contact Details ── */}
