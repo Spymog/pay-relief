@@ -14,10 +14,10 @@ import { useUser } from "@/context/UserProvider";
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
-  { href: "/deferment-notification", label: "Deferment" },
   { href: "/for-debtors", label: "For Debtors" },
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
+  { href: "/deferment-notification", label: "Deferment" },
 ];
 
 export function Navbar() {

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,9 +23,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-// import { ShieldCheck, CreditCard, Building2, Lock } from "lucide-react";
 import {
   ShieldCheck,
   CreditCard,
@@ -35,10 +39,12 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import type { Bank } from "@/lib/banks";
 
 // ── Validation Schema ────────────────────────────────────────────────────────
 
 const bankAccountSchema = z.object({
+  bankId: z.string().min(1, "Please select a bank"),
   bankAccountNumber: z
     .string()
     .min(8, "Account number must be at least 8 digits")
@@ -95,7 +101,7 @@ function formatPhone(value: string) {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function BankAccountForm() {
+export default function BankAccountForm({ banks }: { banks: Bank[] }) {
   const [submitted, setSubmitted] = useState(false);
 
   const [visible, setVisible] = useState({
@@ -110,6 +116,7 @@ export default function BankAccountForm() {
   const form = useForm<BankAccountFormValues>({
     resolver: zodResolver(bankAccountSchema),
     defaultValues: {
+      bankId: "",
       bankAccountNumber: "",
       phoneNumber: "",
       address: "",
@@ -187,7 +194,47 @@ export default function BankAccountForm() {
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                     Account Information
                   </p>
-
+                  {/* Bank Selector */}
+                  <FormField
+                    control={form.control}
+                    name="bankId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bank</FormLabel>
+                        <Select
+                          onValueChange={(selectedId) => {
+                            field.onChange(selectedId);
+                            // Auto-fill bankContactNumber from the selected bank
+                            const bank = banks.find((b) => b.id === selectedId);
+                            if (bank) {
+                              form.setValue(
+                                "bankContactNumber",
+                                bank.deferment_phone,
+                                {
+                                  shouldValidate: true,
+                                },
+                              );
+                            }
+                          }}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your bank" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {banks.map((bank) => (
+                              <SelectItem key={bank.id} value={bank.id}>
+                                {bank.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   {/* Bank Account Number */}
                   <FormField
                     control={form.control}
