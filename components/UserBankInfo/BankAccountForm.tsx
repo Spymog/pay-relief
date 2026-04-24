@@ -30,6 +30,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import { Separator } from "@/components/ui/separator";
 import {
   ShieldCheck,
@@ -103,6 +119,7 @@ function formatPhone(value: string) {
 
 export default function BankAccountForm({ banks }: { banks: Bank[] }) {
   const [submitted, setSubmitted] = useState(false);
+  const [bankPopoverOpen, setBankPopoverOpen] = useState(false);
 
   const [visible, setVisible] = useState({
     bankAccountNumber: false,
@@ -194,47 +211,79 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                     Account Information
                   </p>
-                  {/* Bank Selector */}
+
+                  {/* Bank Search */}
                   <FormField
                     control={form.control}
                     name="bankId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Bank</FormLabel>
-                        <Select
-                          onValueChange={(selectedId) => {
-                            field.onChange(selectedId);
-                            // Auto-fill bankContactNumber from the selected bank
-                            const bank = banks.find((b) => b.id === selectedId);
-                            if (bank) {
-                              form.setValue(
-                                "bankContactNumber",
-                                bank.deferment_phone,
-                                {
-                                  shouldValidate: true,
-                                },
-                              );
-                            }
-                          }}
-                          value={field.value}
+                        <Popover
+                          open={bankPopoverOpen}
+                          onOpenChange={setBankPopoverOpen}
                         >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your bank" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {banks.map((bank) => (
-                              <SelectItem key={bank.id} value={bank.id}>
-                                {bank.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between font-normal",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value
+                                  ? banks.find((b) => b.id === field.value)
+                                      ?.name
+                                  : "Search for your bank..."}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0" align="start">
+                            <Command>
+                              <CommandInput placeholder="Type a bank name..." />
+                              <CommandList>
+                                <CommandEmpty>No bank found.</CommandEmpty>
+                                <CommandGroup>
+                                  {banks.map((bank) => (
+                                    <CommandItem
+                                      key={bank.id}
+                                      value={bank.name}
+                                      onSelect={() => {
+                                        field.onChange(bank.id);
+                                        form.setValue(
+                                          "bankContactNumber",
+                                          bank.deferment_phone,
+                                          {
+                                            shouldValidate: true,
+                                          },
+                                        );
+                                        setBankPopoverOpen(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          field.value === bank.id
+                                            ? "opacity-100"
+                                            : "opacity-0",
+                                        )}
+                                      />
+                                      {bank.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   {/* Bank Account Number */}
                   <FormField
                     control={form.control}
