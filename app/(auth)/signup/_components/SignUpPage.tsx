@@ -26,7 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
 
 export default function SignUpPage() {
   const supabase = createClient();
@@ -42,6 +42,8 @@ export default function SignUpPage() {
   });
 
   const { isSubmitting } = form.formState;
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (values: SignUpValues) => {
     setServerMessage(null);
@@ -103,7 +105,8 @@ export default function SignUpPage() {
                       <Input
                         type="email"
                         placeholder="you@example.com"
-                        autoComplete="email"
+                        autoComplete="off"
+                        // autoComplete="email"
                         disabled={isSubmitting}
                         {...field}
                       />
@@ -120,13 +123,34 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Min. 8 chars, 1 uppercase, 1 number"
-                        autoComplete="new-password"
-                        disabled={isSubmitting}
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Min. 8 chars, 1 uppercase, 1 number"
+                          autoComplete="new-password"
+                          disabled={isSubmitting}
+                          className="pr-10"
+                          {...field}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                          onClick={() => setShowPassword((v) => !v)}
+                          disabled={isSubmitting}
+                          tabIndex={-1}
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,13 +164,36 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Confirm password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="new-password"
-                        disabled={isSubmitting}
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          autoComplete="new-password"
+                          disabled={isSubmitting}
+                          className="pr-10"
+                          {...field}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                          onClick={() => setShowConfirmPassword((v) => !v)}
+                          disabled={isSubmitting}
+                          tabIndex={-1}
+                          aria-label={
+                            showConfirmPassword
+                              ? "Hide confirm password"
+                              : "Show confirm password"
+                          }
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

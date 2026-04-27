@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans, Cormorant_Garamond, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
 import { UserProvider } from "@/context/UserProvider";
 import { createClient } from "@/lib/supabase/server";

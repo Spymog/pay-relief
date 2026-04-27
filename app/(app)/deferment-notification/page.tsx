@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DefermentHero } from "@/components/sections/deferment/deferment-hero";
-import { getBanks } from "../actions/getBanks";
+// import { getBanks } from "../actions/getBanks";
+import { getBanks } from "@/app/actions/getBanks";
 
 export const metadata: Metadata = {
   title: "Deferment Notification — PayRelief",

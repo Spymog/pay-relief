@@ -26,7 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
 
 export default function SignInPage() {
   const supabase = createClient();
@@ -42,6 +42,7 @@ export default function SignInPage() {
   });
 
   const { isSubmitting } = form.formState;
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (values: SignInValues) => {
     setServerMessage(null);
@@ -112,7 +113,7 @@ export default function SignInPage() {
                       <Input
                         type="email"
                         placeholder="you@example.com"
-                        autoComplete="email"
+                        autoComplete="off"
                         disabled={isSubmitting}
                         {...field}
                       />
@@ -129,13 +130,34 @@ export default function SignInPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="current-password"
-                        disabled={isSubmitting}
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder=""
+                          autoComplete="current-password"
+                          disabled={isSubmitting}
+                          className="pr-10"
+                          {...field}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                          onClick={() => setShowPassword((v) => !v)}
+                          disabled={isSubmitting}
+                          tabIndex={-1}
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
