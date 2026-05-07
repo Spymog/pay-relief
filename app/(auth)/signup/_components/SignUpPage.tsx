@@ -104,7 +104,7 @@ export default function SignUpPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        // placeholder="you@example.com"
                         autoComplete="off"
                         // autoComplete="email"
                         disabled={isSubmitting}
@@ -126,7 +126,7 @@ export default function SignUpPage() {
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
-                          placeholder="Min. 8 chars, 1 uppercase, 1 number"
+                          // placeholder="Min. 8 chars, 1 uppercase, 1 number"
                           autoComplete="new-password"
                           disabled={isSubmitting}
                           className="pr-10"
@@ -167,7 +167,7 @@ export default function SignUpPage() {
                       <div className="relative">
                         <Input
                           type={showConfirmPassword ? "text" : "password"}
-                          placeholder="••••••••"
+                          // placeholder="••••••••"
                           autoComplete="new-password"
                           disabled={isSubmitting}
                           className="pr-10"

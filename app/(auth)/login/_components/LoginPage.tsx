@@ -112,7 +112,7 @@ export default function SignInPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        // placeholder="you@example.com"
                         autoComplete="off"
                         disabled={isSubmitting}
                         {...field}

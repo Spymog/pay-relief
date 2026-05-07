@@ -24,13 +24,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -45,7 +38,6 @@ import {
 } from "@/components/ui/command";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 import { Separator } from "@/components/ui/separator";
 import {
   ShieldCheck,
@@ -56,6 +48,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import type { Bank } from "@/lib/banks";
+import { useUser } from "@/context/UserProvider";
 
 // ── Validation Schema ────────────────────────────────────────────────────────
 
@@ -127,6 +120,8 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
     ssnLast4: false,
   });
 
+  const currentUser = useUser();
+
   const toggle = (field: keyof typeof visible) =>
     setVisible((prev) => ({ ...prev, [field]: !prev[field] }));
 
@@ -138,7 +133,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
       phoneNumber: "",
       address: "",
       creditCardNumber: "",
-      bankContactNumber: "", // NEW
+      bankContactNumber: "",
       email: "",
       ssnLast4: "",
     },
@@ -148,6 +143,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
     // Replace with your actual submission logic (e.g. API call)
     console.log("Form submitted:", values);
     setSubmitted(true);
+    // await { error } = fetch("/api/make-call", {method: "POST", body:})
   }
 
   return (
