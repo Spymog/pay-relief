@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/for-counselors", label: "For Counselors" },
   { href: "/for-lenders", label: "For Lenders" },
   { href: "/deferment-notification", label: "Deferment" },
+  { href: "/notify", label: "Notification" },
 ];
 
 export function Navbar() {
