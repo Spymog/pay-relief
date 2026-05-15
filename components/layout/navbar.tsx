@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, UserCircle } from "lucide-react";
+import { Menu, X, UserCircle, LogOut, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import { useUser } from "@/context/UserProvider";
-
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
@@ -21,26 +20,51 @@ const navLinks = [
   { href: "/notify", label: "Notification" },
 ];
 
+// Dropdown menu items
+const profileMenuItems = [
+  { href: "/profile", label: "Profile", icon: User },
+  { href: "/settings", label: "Settings", icon: Settings },
+];
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
+  const profileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const currentUser = useUser();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(e.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+  }, [pathname]);
 
   async function handleSignOut() {
     const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (!error) {
-      console.log("User Signed Out");
+      setIsProfileMenuOpen(false);
     }
   }
 
@@ -97,23 +121,75 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* Auth — Desktop */}
+            {/* Account — Desktop */}
             {currentUser ? (
-              <>
-                <Button onClick={handleSignOut} className="cursor-pointer">
-                  Sign Out
-                </Button>
-                <Link
-                  href="/profile"
+              // Profile dropdown trigger + menu, wrapped in a relative container
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   className={cn(
                     "text-muted-foreground hover:text-accent transition-colors",
-                    pathname === "/profile" && "text-foreground",
+                    (isProfileMenuOpen || pathname === "/profile") &&
+                      "text-foreground",
                   )}
-                  aria-label="Go to profile"
+                  aria-label="Open profile menu"
+                  aria-expanded={isProfileMenuOpen}
+                  aria-haspopup="true"
                 >
                   <UserCircle className="h-6 w-6" />
-                </Link>
-              </>
+                </button>
+
+                <AnimatePresence>
+                  {isProfileMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="absolute right-0 mt-2 w-48 rounded-lg border border-border bg-background shadow-lg overflow-hidden"
+                      role="menu"
+                    >
+                      {/* Optional: user info header */}
+                      {currentUser?.email && (
+                        <div className="px-4 py-3 border-b border-border">
+                          <p className="text-xs text-muted-foreground truncate">
+                            {currentUser.email}
+                          </p>
+                        </div>
+                      )}
+
+                      {profileMenuItems.map(({ href, label, icon: Icon }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          role="menuitem"
+                          className={cn(
+                            "flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted",
+                            pathname === href
+                              ? "text-foreground bg-primary/5"
+                              : "text-muted-foreground",
+                          )}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {label}
+                        </Link>
+                      ))}
+
+                      {/* Sign out at bottom, separated */}
+                      <div className="border-t border-border">
+                        <button
+                          onClick={handleSignOut}
+                          role="menuitem"
+                          className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
               <Button
                 asChild
@@ -164,22 +240,37 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {/* Auth — Mobile */}
-              <div className="px-4 pt-2">
+              {/* Account — Mobile */}
+              <div className="px-4 pt-2 space-y-1 border-t border-border">
                 {currentUser ? (
-                  <Link
-                    href="/profile"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors",
-                      pathname === "/profile"
-                        ? "bg-primary/10 text-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
-                  >
-                    <UserCircle className="h-5 w-5" />
-                    Profile
-                  </Link>
+                  <>
+                    {profileMenuItems.map(({ href, label, icon: Icon }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-colors",
+                          pathname === href
+                            ? "bg-primary/10 text-foreground"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                        {label}
+                      </Link>
+                    ))}
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex w-full items-center gap-3 px-4 py-3 text-base font-medium rounded-lg text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      Sign Out
+                    </button>
+                  </>
                 ) : (
                   <Button
                     asChild

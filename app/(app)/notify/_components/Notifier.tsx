@@ -45,7 +45,6 @@ export default function Notifier() {
   const [body, setBody] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  // If returning from OAuth with success, clear any leftover form data
   useEffect(() => {
     if (success) {
       setTo("");
@@ -74,7 +73,6 @@ export default function Notifier() {
   async function handleSend() {
     if (!validate()) return;
 
-    // POST form data to the server — nothing sensitive touches the URL
     const res = await fetch("/api/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,27 +85,26 @@ export default function Notifier() {
       return;
     }
 
-    // Server returns the Google OAuth URL — redirect the browser to it
     const { redirectUrl } = await res.json();
     window.location.href = redirectUrl;
   }
 
   if (success) {
     return (
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-white shadow-2xl">
+      <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-3">
-            <div className="rounded-full bg-emerald-500/10 p-2">
-              <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+            <div className="rounded-full bg-accent/10 p-2">
+              <CheckCircle2 className="h-6 w-6 text-accent" />
             </div>
-            <CardTitle className="text-xl text-white">Email Sent!</CardTitle>
+            <CardTitle className="text-xl">Email Sent!</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3 text-zinc-400 text-sm">
+        <CardContent className="space-y-3 text-muted-foreground text-sm">
           {sentFrom && (
             <p>
               Your email was sent from{" "}
-              <span className="font-medium text-zinc-200">
+              <span className="font-medium text-foreground">
                 {decodeURIComponent(sentFrom)}
               </span>{" "}
               using your Gmail account.
@@ -121,7 +118,7 @@ export default function Notifier() {
         <CardFooter>
           <Button
             variant="outline"
-            className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            className="w-full"
             onClick={() => (window.location.href = "/notify")}
           >
             Send Another Email
@@ -132,21 +129,21 @@ export default function Notifier() {
   }
 
   return (
-    <Card className="w-full max-w-lg bg-zinc-900 border-zinc-800 text-white shadow-2xl">
+    <Card className="w-full max-w-lg shadow-2xl">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-xl text-white flex items-center gap-2">
-              <Mail className="h-5 w-5 text-zinc-400" />
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Mail className="h-5 w-5 text-muted-foreground" />
               Send from Your Gmail
             </CardTitle>
-            <CardDescription className="text-zinc-500">
+            <CardDescription>
               Fill in the details, then authenticate with Google to send.
             </CardDescription>
           </div>
           <Badge
             variant="outline"
-            className="border-emerald-700 text-emerald-400 text-xs gap-1 shrink-0"
+            className="border-accent text-accent text-xs gap-1 shrink-0"
           >
             <ShieldCheck className="h-3 w-3" />
             No storage
@@ -157,7 +154,7 @@ export default function Notifier() {
       <CardContent className="space-y-4">
         {/* Error from OAuth callback */}
         {error && (
-          <Alert className="border-red-800 bg-red-950/40 text-red-400">
+          <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               {ERROR_MESSAGES[error] ?? "An unexpected error occurred."}
@@ -167,14 +164,14 @@ export default function Notifier() {
 
         {/* Validation error */}
         {validationError && (
-          <Alert className="border-amber-800 bg-amber-950/40 text-amber-400">
-            <AlertCircle className="h-4 w-4" />
+          <Alert className="border-accent/50 bg-accent/10 text-accent-foreground">
+            <AlertCircle className="h-4 w-4 text-accent" />
             <AlertDescription>{validationError}</AlertDescription>
           </Alert>
         )}
 
         <div className="space-y-1.5">
-          <Label htmlFor="to" className="text-zinc-300 text-sm">
+          <Label htmlFor="to" className="text-sm">
             To
           </Label>
           <Input
@@ -183,12 +180,11 @@ export default function Notifier() {
             placeholder="recipient@example.com"
             value={to}
             onChange={(e) => setTo(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600 focus-visible:ring-zinc-500"
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="subject" className="text-zinc-300 text-sm">
+          <Label htmlFor="subject" className="text-sm">
             Subject
           </Label>
           <Input
@@ -196,12 +192,11 @@ export default function Notifier() {
             placeholder="What's this about?"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600 focus-visible:ring-zinc-500"
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="body" className="text-zinc-300 text-sm">
+          <Label htmlFor="body" className="text-sm">
             Message
           </Label>
           <Textarea
@@ -210,13 +205,13 @@ export default function Notifier() {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={6}
-            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600 focus-visible:ring-zinc-500 resize-none"
+            className="resize-none"
           />
         </div>
 
         {/* Privacy notice */}
-        <div className="rounded-md border border-zinc-800 bg-zinc-800/40 p-3 text-xs text-zinc-500 space-y-1">
-          <p className="font-medium text-zinc-400">How this works</p>
+        <div className="rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground space-y-1">
+          <p className="font-medium text-foreground">How this works</p>
           <p>
             Clicking Send will open a Google sign-in window. After you
             authenticate, your email is sent immediately using the Gmail API.
@@ -227,10 +222,7 @@ export default function Notifier() {
       </CardContent>
 
       <CardFooter>
-        <Button
-          onClick={handleSend}
-          className="w-full bg-white text-zinc-900 hover:bg-zinc-100 font-medium gap-2"
-        >
+        <Button className="w-full font-medium gap-2">
           Sign in with Google & Send
           <ArrowRight className="h-4 w-4" />
         </Button>
