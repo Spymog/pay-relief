@@ -222,7 +222,7 @@ export default function Notifier() {
       </CardContent>
 
       <CardFooter>
-        <Button className="w-full font-medium gap-2">
+        <Button className="w-full font-medium gap-2" onClick={handleSend}>
           Sign in with Google & Send
           <ArrowRight className="h-4 w-4" />
         </Button>

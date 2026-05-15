@@ -76,7 +76,7 @@ export function Navbar() {
       )}
     >
       <nav className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 lg:h-20">
           {/* Logo */}
           <Link href="/for-debtors" className="flex items-center gap-2.5 group">
             <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
@@ -92,8 +92,8 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Nav Links — centered in middle column */}
+          <div className="hidden md:flex items-center justify-center gap-8 min-w-fit">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -120,11 +120,12 @@ export function Navbar() {
                 </AnimatePresence>
               </Link>
             ))}
+          </div>
 
-            {/* Account — Desktop */}
+          {/* Auth — pinned to right column */}
+          <div className="flex items-center justify-end" ref={profileMenuRef}>
             {currentUser ? (
-              // Profile dropdown trigger + menu, wrapped in a relative container
-              <div className="relative" ref={profileMenuRef}>
+              <div className="relative">
                 <button
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   className={cn(
@@ -149,7 +150,6 @@ export function Navbar() {
                       className="absolute right-0 mt-2 w-48 rounded-lg border border-border bg-background shadow-lg overflow-hidden"
                       role="menu"
                     >
-                      {/* Optional: user info header */}
                       {currentUser?.email && (
                         <div className="px-4 py-3 border-b border-border">
                           <p className="text-xs text-muted-foreground truncate">
@@ -175,7 +175,6 @@ export function Navbar() {
                         </Link>
                       ))}
 
-                      {/* Sign out at bottom, separated */}
                       <div className="border-t border-border">
                         <button
                           onClick={handleSignOut}
@@ -199,20 +198,20 @@ export function Navbar() {
                 <Link href="/login">Login</Link>
               </Button>
             )}
-          </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-foreground ml-2"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -240,7 +239,6 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {/* Account — Mobile */}
               <div className="px-4 pt-2 space-y-1 border-t border-border">
                 {currentUser ? (
                   <>
