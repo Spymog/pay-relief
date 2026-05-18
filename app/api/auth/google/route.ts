@@ -19,16 +19,21 @@ export async function POST(req: NextRequest) {
   const { to, subject, body } = await req.json();
 
   // Basic server-side validation
-  if (!to || !subject || !body) {
+  if (!to || !Array.isArray(to) || to.length === 0 || !subject || !body) {
     return NextResponse.json(
       { error: "Missing required fields." },
       { status: 400 },
     );
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+  // Validate every address in the array
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const allValid = to.every((address: string) =>
+    emailRegex.test(address.trim()),
+  );
+  if (!allValid) {
     return NextResponse.json(
-      { error: "Invalid recipient email." },
+      { error: "One or more recipient emails are invalid." },
       { status: 400 },
     );
   }

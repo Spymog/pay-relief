@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import {
   Mail,
   ShieldCheck,
   ArrowRight,
+  X,
 } from "lucide-react";
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -34,49 +35,104 @@ const ERROR_MESSAGES: Record<string, string> = {
   invalid_state: "Session expired or invalid. Please fill out the form again.",
 };
 
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 export default function Notifier() {
   const searchParams = useSearchParams();
   const success = searchParams.get("success") === "true";
   const error = searchParams.get("error");
   const sentFrom = searchParams.get("from");
 
-  const [to, setTo] = useState("");
+  const [toList, setToList] = useState<string[]>([]);
+  const [toInput, setToInput] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [validationError, setValidationError] = useState("");
+  const toInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (success) {
-      setTo("");
+      setToList([]);
+      setToInput("");
       setSubject("");
       setBody("");
     }
   }, [success]);
 
+  /** Commit the current input value as a chip, if valid. */
+  function commitToInput() {
+    const trimmed = toInput.trim().replace(/,+$/, "");
+    if (!trimmed) return;
+    if (!isValidEmail(trimmed)) {
+      setValidationError(`"${trimmed}" is not a valid email address.`);
+      return;
+    }
+    if (toList.includes(trimmed)) {
+      setToInput("");
+      return;
+    }
+    setToList((prev) => [...prev, trimmed]);
+    setToInput("");
+    setValidationError("");
+  }
+
+  function handleToKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.key === "," || e.key === "Tab") {
+      e.preventDefault();
+      commitToInput();
+    } else if (e.key === "Backspace" && toInput === "" && toList.length > 0) {
+      // Remove last chip on backspace when input is empty
+      setToList((prev) => prev.slice(0, -1));
+    }
+  }
+
+  function removeEmail(email: string) {
+    setToList((prev) => prev.filter((e) => e !== email));
+  }
+
   function validate() {
-    if (!to.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to.trim())) {
-      setValidationError("Please enter a valid recipient email address.");
-      return false;
+    // Commit any pending input first
+    const pendingTrimmed = toInput.trim().replace(/,+$/, "");
+    let finalList = toList;
+
+    if (pendingTrimmed) {
+      if (!isValidEmail(pendingTrimmed)) {
+        setValidationError(`"${pendingTrimmed}" is not a valid email address.`);
+        return null;
+      }
+      if (!toList.includes(pendingTrimmed)) {
+        finalList = [...toList, pendingTrimmed];
+        setToList(finalList);
+        setToInput("");
+      }
+    }
+
+    if (finalList.length === 0) {
+      setValidationError("Please enter at least one recipient email address.");
+      return null;
     }
     if (!subject.trim()) {
       setValidationError("Please enter a subject.");
-      return false;
+      return null;
     }
     if (!body.trim()) {
       setValidationError("Please enter a message body.");
-      return false;
+      return null;
     }
     setValidationError("");
-    return true;
+    return finalList;
   }
 
   async function handleSend() {
-    if (!validate()) return;
+    const recipients = validate();
+    if (!recipients) return;
 
     const res = await fetch("/api/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to, subject, body }),
+      body: JSON.stringify({ to: recipients, subject, body }),
     });
 
     if (!res.ok) {
@@ -118,7 +174,7 @@ export default function Notifier() {
         <CardFooter>
           <Button
             variant="outline"
-            className="w-full"
+            className="w-full hover:cursor-pointer"
             onClick={() => (window.location.href = "/notify")}
           >
             Send Another Email
@@ -170,17 +226,59 @@ export default function Notifier() {
           </Alert>
         )}
 
+        {/* Multi-email chip input */}
         <div className="space-y-1.5">
           <Label htmlFor="to" className="text-sm">
             To
           </Label>
-          <Input
-            id="to"
-            type="email"
-            placeholder="recipient@example.com"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
+          <div
+            className="flex flex-wrap gap-1.5 min-h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 cursor-text"
+            onClick={() => toInputRef.current?.focus()}
+          >
+            {toList.map((email) => (
+              <span
+                key={email}
+                className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground"
+              >
+                {email}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeEmail(email);
+                  }}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={`Remove ${email}`}
+                >
+                  <X className="h-3 w-3 hover:cursor-pointer" />
+                </button>
+              </span>
+            ))}
+            <input
+              ref={toInputRef}
+              id="to"
+              type="email"
+              placeholder={
+                toList.length === 0 ? "recipient@example.com" : "Add another…"
+              }
+              value={toInput}
+              onChange={(e) => setToInput(e.target.value)}
+              onKeyDown={handleToKeyDown}
+              onBlur={commitToInput}
+              className="flex-1 min-w-32 bg-transparent outline-none placeholder:text-muted-foreground"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Press{" "}
+            <kbd className="rounded border border-border px-1 font-mono text-[10px]">
+              Enter
+            </kbd>{" "}
+            or{" "}
+            <kbd className="rounded border border-border px-1 font-mono text-[10px]">
+              ,
+            </kbd>{" "}
+            after each address to add it.
+          </p>
         </div>
 
         <div className="space-y-1.5">
@@ -222,7 +320,10 @@ export default function Notifier() {
       </CardContent>
 
       <CardFooter>
-        <Button className="w-full font-medium gap-2" onClick={handleSend}>
+        <Button
+          onClick={handleSend}
+          className="w-full font-medium gap-2 hover:cursor-pointer"
+        >
           Sign in with Google & Send
           <ArrowRight className="h-4 w-4" />
         </Button>

@@ -16,14 +16,14 @@ const oauth2Client = new OAuth2Client({
 });
 
 function makeRawEmail(
-  to: string,
+  to: string[],
   from: string,
   subject: string,
   body: string,
 ): string {
   const email = [
     `From: ${from}`,
-    `To: ${to}`,
+    `To: ${to.join(", ")}`,
     `Subject: ${subject}`,
     `MIME-Version: 1.0`,
     `Content-Type: text/plain; charset=UTF-8`,
