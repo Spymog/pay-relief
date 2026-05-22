@@ -8,7 +8,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-// Same client config as the initiation route — used here for token exchange
 const oauth2Client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -16,14 +15,14 @@ const oauth2Client = new OAuth2Client({
 });
 
 function makeRawEmail(
-  to: string[],
+  to: string,
   from: string,
   subject: string,
   body: string,
 ): string {
   const email = [
     `From: ${from}`,
-    `To: ${to.join(", ")}`,
+    `To: ${to}`,
     `Subject: ${subject}`,
     `MIME-Version: 1.0`,
     `Content-Type: text/plain; charset=UTF-8`,
@@ -40,14 +39,12 @@ export async function GET(req: NextRequest) {
   const nonce = searchParams.get("state");
   const error = searchParams.get("error");
 
-  // User denied access
   if (error || !code || !nonce) {
     return NextResponse.redirect(
       `${process.env.NEXT_PUBLIC_APP_URL}?error=access_denied`,
     );
   }
 
-  // Look up the nonce in Supabase to retrieve form data
   const { data, error: dbError } = await supabase
     .from("oauth_state")
     .select("to_email, subject, body, expires_at")
@@ -60,17 +57,15 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // Delete the row immediately — it's single-use
+  // Delete immediately — single-use
   await supabase.from("oauth_state").delete().eq("nonce", nonce);
 
-  // Reject if expired
   if (new Date(data.expires_at) < new Date()) {
     return NextResponse.redirect(
       `${process.env.NEXT_PUBLIC_APP_URL}?error=invalid_state`,
     );
   }
 
-  // Exchange the authorization code for tokens — replaces the manual fetch to oauth2.googleapis.com/token
   let tokens;
   try {
     const { tokens: exchanged } = await oauth2Client.getToken(code);
@@ -82,13 +77,9 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // Attach the tokens to the client — subsequent API calls are automatically authorized
   oauth2Client.setCredentials(tokens);
-
-  // Instantiate the typed Gmail client, authorized via the OAuth2 client
   const gmailClient = gmail({ version: "v1", auth: oauth2Client });
 
-  // Fetch the user's Gmail address — replaces the manual fetch to /gmail/v1/users/me/profile
   let emailAddress: string;
   try {
     const ticket = await oauth2Client.getTokenInfo(tokens.access_token!);
@@ -100,36 +91,54 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // Build the RFC 2822 message and send — replaces the manual fetch to /gmail/v1/users/me/messages/send
+  // Send one individual copy per recipient so each person only sees their own
+  // address in the To field — no recipient is exposed to the others.
+  const recipients: string[] = data.to_email;
+  const failed: string[] = [];
+
+  for (const recipient of recipients) {
+    try {
+      const raw = makeRawEmail(
+        recipient,
+        emailAddress,
+        data.subject,
+        data.body,
+      );
+      await gmailClient.users.messages.send({
+        userId: "me",
+        requestBody: { raw },
+      });
+    } catch (err) {
+      // Collect failures rather than bailing out mid-loop — partial delivery
+      // is better than stopping after the first failure.
+      console.error(`Gmail send failed for ${recipient}:`, err);
+      failed.push(recipient);
+    }
+  }
+
+  // Revoke the token — app no longer needs any Gmail access
   try {
-    const raw = makeRawEmail(
-      data.to_email,
-      emailAddress,
-      data.subject,
-      data.body,
-    );
-    await gmailClient.users.messages.send({
-      userId: "me",
-      requestBody: { raw },
-    });
+    await oauth2Client.revokeToken(tokens.access_token!);
   } catch (err) {
-    console.error("Gmail send failed:", err);
+    console.error("Token revocation failed:", err);
+  }
+
+  if (failed.length === recipients.length) {
+    // Every send failed — treat as a full failure
     return NextResponse.redirect(
       `${process.env.NEXT_PUBLIC_APP_URL}?error=send_failed`,
     );
   }
 
-  // Revoke the token immediately after sending — app no longer has any Gmail access
-  try {
-    await oauth2Client.revokeToken(tokens.access_token!);
-  } catch (err) {
-    // Non-fatal — log it but don't block the success redirect.
-    // The token will expire naturally on its own regardless.
-    console.error("Token revocation failed:", err);
+  const sentFrom = encodeURIComponent(emailAddress);
+  const params = new URLSearchParams({ success: "true", from: sentFrom });
+  if (failed.length > 0) {
+    // Partial failure — surface how many sends succeeded so the UI can inform the user
+    params.set("sent", String(recipients.length - failed.length));
+    params.set("failed", String(failed.length));
   }
 
-  const sentFrom = encodeURIComponent(emailAddress);
   return NextResponse.redirect(
-    `${process.env.NEXT_PUBLIC_APP_URL}?success=true&from=${sentFrom}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}?${params.toString()}`,
   );
 }
