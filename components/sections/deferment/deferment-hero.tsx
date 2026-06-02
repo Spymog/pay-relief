@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePlaidLink } from "react-plaid-link";
-import BankAccountForm from "@/components/UserBankInfo/BankAccountForm";
+import BankAccountForm from "@/app/(app)/deferment-notification/_components/BankAccountForm";
 import type { Bank } from "@/lib/banks";
 
 interface LinkProps {

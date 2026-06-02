@@ -139,11 +139,16 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
     },
   });
 
-  function onSubmit(values: BankAccountFormValues) {
+  async function onSubmit(values: BankAccountFormValues) {
     // Replace with your actual submission logic (e.g. API call)
     console.log("Form submitted:", values);
     setSubmitted(true);
-    // await { error } = fetch("/api/make-call", {method: "POST", body:})
+    const response = await fetch("/api/make-call", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+    const result = await response.json();
+    console.log("NLPearl call response:", result);
   }
 
   return (
