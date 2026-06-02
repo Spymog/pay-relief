@@ -6,7 +6,6 @@ interface MakeCallRequestBody {
   bankAccountNumber: string;
   phoneNumber: string;
   address: string;
-  creditCardNumber: string;
   bankContactNumber: string;
   email: string;
   ssnLast4: string;
@@ -26,7 +25,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       bankContactNumber,
       phoneNumber,
       address,
-      creditCardNumber,
       email,
       ssnLast4,
     } = body;
@@ -69,7 +67,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         accountType: "Credit Card",
         emailAddress: email,
         accountNumber: bankAccountNumber,
-        creditCardNumber: creditCardNumber,
         address: address,
         last4SSN: ssnLast4,
       },

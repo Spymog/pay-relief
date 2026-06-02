@@ -39,14 +39,7 @@ import {
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import {
-  ShieldCheck,
-  CreditCard,
-  Building2,
-  Lock,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { ShieldCheck, Building2, Eye, EyeOff } from "lucide-react";
 import type { Bank } from "@/lib/banks";
 import { useUser } from "@/context/UserProvider";
 
@@ -72,14 +65,6 @@ const bankAccountSchema = z.object({
     .min(5, "Address must be at least 5 characters")
     .max(200, "Address is too long"),
 
-  creditCardNumber: z
-    .string()
-    .regex(
-      /^\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}$/,
-      "Enter a valid 16-digit card number",
-    ),
-
-  // NEW
   bankContactNumber: z
     .string()
     .regex(
@@ -99,11 +84,6 @@ type BankAccountFormValues = z.infer<typeof bankAccountSchema>;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatCardNumber(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 16);
-  return digits.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
-}
-
 function formatPhone(value: string) {
   return value.replace(/[^\d\s\-+().]/g, "").slice(0, 20);
 }
@@ -116,7 +96,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
 
   const [visible, setVisible] = useState({
     bankAccountNumber: false,
-    creditCardNumber: false,
     ssnLast4: false,
   });
 
@@ -132,7 +111,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
       bankAccountNumber: "",
       phoneNumber: "",
       address: "",
-      creditCardNumber: "",
       bankContactNumber: "",
       email: "",
       ssnLast4: "",
@@ -140,7 +118,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
   });
 
   async function onSubmit(values: BankAccountFormValues) {
-    // Replace with your actual submission logic (e.g. API call)
     console.log("Form submitted:", values);
     setSubmitted(true);
     const response = await fetch("/api/make-call", {
@@ -153,7 +130,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
 
   return (
     <div className="flex items-center justify-center p-4">
-      {/* <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4"> */}
       {submitted ? (
         <Card className="w-full max-w-md text-center shadow-lg">
           <CardHeader>
@@ -190,13 +166,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
             <CardDescription className="text-sm text-slate-500">
               Please fill in your banking information. All fields are required.
             </CardDescription>
-            {/* <Badge
-            variant="secondary"
-            className="w-fit gap-1.5 bg-green-50 text-green-700 border border-green-200"
-          >
-            <Lock className="h-3 w-3" />
-            Encrypted &amp; Secure
-          </Badge> */}
           </CardHeader>
 
           <Separator />
@@ -298,7 +267,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                               type={
                                 visible.bankAccountNumber ? "text" : "password"
                               }
-                              // placeholder="e.g. 123456789012"
                               inputMode="numeric"
                               maxLength={17}
                               {...field}
@@ -325,87 +293,36 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                         </FormControl>
                         <FormDescription>
                           Your checking or savings account number.
-                          {/* Your checking or savings account number (8–17 digits). */}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  {/* Credit Card Number + Bank Contact Number */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="creditCardNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-1.5">
-                            <CreditCard className="h-3.5 w-3.5 text-slate-500" />
-                            Credit Card Number
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                type={
-                                  visible.creditCardNumber ? "text" : "password"
-                                }
-                                inputMode="numeric"
-                                maxLength={19}
-                                {...field}
-                                onChange={(e) =>
-                                  field.onChange(
-                                    formatCardNumber(e.target.value),
-                                  )
-                                }
-                                className="pr-10"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => toggle("creditCardNumber")}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                                aria-label="Toggle credit card number visibility"
-                              >
-                                {visible.creditCardNumber ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
-                                  <Eye className="h-4 w-4" />
-                                )}
-                              </button>
-                            </div>
-                          </FormControl>
-                          <FormDescription>
-                            16-digit number on the front of your card.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* NEW — Bank Contact Number */}
-                    <FormField
-                      control={form.control}
-                      name="bankContactNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Bank Contact Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="tel"
-                              inputMode="numeric"
-                              {...field}
-                              onChange={(e) =>
-                                field.onChange(formatPhone(e.target.value))
-                              }
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            Contact number associated with your bank.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  {/* Bank Contact Number */}
+                  <FormField
+                    control={form.control}
+                    name="bankContactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bank Contact Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            inputMode="numeric"
+                            {...field}
+                            onChange={(e) =>
+                              field.onChange(formatPhone(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Contact number associated with your bank.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
                 {/* ── Contact Details ── */}
@@ -423,11 +340,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                         <FormItem>
                           <FormLabel>Email Address</FormLabel>
                           <FormControl>
-                            <Input
-                              type="email"
-                              // placeholder="you@example.com"
-                              {...field}
-                            />
+                            <Input type="email" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -444,7 +357,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                           <FormControl>
                             <Input
                               type="tel"
-                              // placeholder="+1 555-123-4567"
                               {...field}
                               onChange={(e) =>
                                 field.onChange(formatPhone(e.target.value))
@@ -465,10 +377,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                       <FormItem>
                         <FormLabel>Street Address</FormLabel>
                         <FormControl>
-                          <Input
-                            // placeholder="123 Main St, City, State, ZIP"
-                            {...field}
-                          />
+                          <Input {...field} />
                         </FormControl>
                         <FormDescription>
                           Full mailing address associated with your account.
@@ -484,11 +393,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                     Verification
                   </p>
-                  {/* Submit Row */}
                   <div className="flex items-center justify-between pt-2">
-                    {/* <p className="text-xs text-slate-400">
-                    Your data is protected with 256-bit encryption.
-                  </p> */}
                     <FormField
                       control={form.control}
                       name="ssnLast4"
@@ -500,7 +405,6 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                               <Input
                                 className="placeholder:text-muted-foreground-200"
                                 type={visible.ssnLast4 ? "text" : "password"}
-                                // placeholder="••••"
                                 inputMode="numeric"
                                 maxLength={4}
                                 autoComplete="off"
