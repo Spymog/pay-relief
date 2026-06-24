@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { LendersHero } from "@/components/sections/lenders-hero";
-import { LendersProblem } from "@/components/sections/lenders-problem";
-import { LendersHowItWorks } from "@/components/sections/lenders-how-it-works";
-import { LendersFeatures } from "@/components/sections/lenders-features";
-import { LendersPerks } from "@/components/sections/lenders-perks";
-import { LendersDebtTypes } from "@/components/sections/lenders-debt-types";
-import { LendersTiers } from "@/components/sections/lenders-tiers";
-import { LendersFAQ } from "@/components/sections/lenders-faq";
-import { LendersFinalCTA } from "@/components/sections/lenders-final-cta";
+import { LendersHero } from "@/components/sections/lenders/lenders-hero";
+import { LendersProblem } from "@/components/sections/lenders/lenders-problem";
+import { LendersHowItWorks } from "@/components/sections/lenders/lenders-how-it-works";
+import { LendersFeatures } from "@/components/sections/lenders/lenders-features";
+import { LendersPerks } from "@/components/sections/lenders/lenders-perks";
+import { LendersDebtTypes } from "@/components/sections/lenders/lenders-debt-types";
+import { LendersTiers } from "@/components/sections/lenders/lenders-tiers";
+import { LendersFAQ } from "@/components/sections/lenders/lenders-faq";
+import { LendersFinalCTA } from "@/components/sections/lenders/lenders-final-cta";
 
 export const metadata: Metadata = {
   title: "For Lenders — PayRelief",
