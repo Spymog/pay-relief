@@ -72,7 +72,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     };
 
-    const nlpearlResponse = await fetch(
+    const nlPearlResponse = await fetch(
       `https://api.nlpearl.ai/v2/Outbound/${pearlId}/Lead`,
       {
         method: "POST",
@@ -84,17 +84,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     );
 
-    if (!nlpearlResponse.ok) {
-      const errorText = await nlpearlResponse.text();
+    if (!nlPearlResponse.ok) {
+      const errorText = await nlPearlResponse.text();
       const cleanError = JSON.parse(errorText);
-      console.error("NLPearl API error:", nlpearlResponse.status, cleanError);
+      console.error("NLPearl API error:", nlPearlResponse.status, cleanError);
       return NextResponse.json(
         { error: "Failed to create lead", errorDetails: cleanError },
-        { status: nlpearlResponse.status },
+        { status: nlPearlResponse.status },
       );
     }
 
-    const data = await nlpearlResponse.json();
+    const data = await nlPearlResponse.json();
 
     return NextResponse.json(
       { success: true, leadId: data.leadId },
