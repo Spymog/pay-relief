@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { toE164US } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 interface MakeCallRequestBody {
   bankId: string;
@@ -45,13 +46,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // .env variables
     const accountId = process.env.NLPEARL_ACCOUNT_ID;
     const secretKey = process.env.NLPEARL_SECRET_KEY;
     const pearlId = process.env.NLPEARL_PEARL_ID;
 
     if (!secretKey || !pearlId) {
       console.error(
-        "Missing required environment variables: NLPEARL_SECRET_KEY or NLPEARL_PEARL_ID",
+        "Missing required environment variables: NLPEARL_ACCOUNT_ID, NLPEARL_SECRET_KEY, or NLPEARL_PEARL_ID",
       );
       return NextResponse.json(
         { error: "Server configuration error" },
@@ -59,6 +61,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // Form the request body
     const payload: NLPearlLeadPayload = {
       phoneNumber: bankNumberE164,
       callData: {
@@ -72,6 +75,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     };
 
+    // Send request to NLPearl
     const nlPearlResponse = await fetch(
       `https://api.nlpearl.ai/v2/Outbound/${pearlId}/Lead`,
       {
@@ -84,15 +88,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     );
 
+    // Check response status
     if (!nlPearlResponse.ok) {
-      const errorText = await nlPearlResponse.text();
-      const cleanError = JSON.parse(errorText);
-      console.error("NLPearl API error:", nlPearlResponse.status, cleanError);
+      const errorText = JSON.parse(await nlPearlResponse.text());
+      console.error("NLPearl API error:", nlPearlResponse.status, errorText);
       return NextResponse.json(
-        { error: "Failed to create lead", errorDetails: cleanError },
+        { error: "Failed to create lead", errorDetails: errorText },
         { status: nlPearlResponse.status },
       );
     }
+
+    // Insert row into call_records table
+    const supabase = await createClient();
+
+    const initialRecord = {};
+
+    const { data: rowData, error: insertError } = await supabase
+      .from("call_records")
+      .insert({ id: 1, name: "Mordor" })
+      .select()
+      .single();
 
     const data = await nlPearlResponse.json();
 
