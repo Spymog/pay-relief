@@ -9,6 +9,6 @@ if (!supabaseUrl || !supabaseKey) {
   );
 }
 
-export function createClient() {
+export function sbBrowserClient() {
   return createBrowserClient(supabaseUrl!, supabaseKey!);
 }

@@ -1,12 +1,12 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { sbServerClient } from "@/lib/supabase/server";
 
 const BANK_SELECT_FIELDS =
   "id, name, slug, deferment_phone, deferment_hours, deferment_url, logo_url, hq, assets_bn, rank";
 
 export async function getBanks() {
-  const supabase = await createClient();
+  const supabase = await sbServerClient();
 
   const { data, error } = await supabase
     .from("banks")

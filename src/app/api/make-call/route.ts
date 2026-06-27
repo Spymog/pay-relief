@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { toE164US } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/server";
+import { sbServerClient } from "@/lib/supabase/server";
 
 interface MakeCallRequestBody {
   bankId: string;
@@ -10,6 +10,7 @@ interface MakeCallRequestBody {
   bankContactNumber: string;
   email: string;
   ssnLast4: string;
+  bankName: string;
 }
 
 interface NLPearlLeadPayload {
@@ -28,6 +29,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       address,
       email,
       ssnLast4,
+      bankName,
+      bankId,
     } = body;
 
     // Validate required fields
@@ -61,13 +64,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    const accountType = "Credit";
+
     // Form the request body
     const payload: NLPearlLeadPayload = {
       phoneNumber: bankNumberE164,
       callData: {
         firstName: "John",
         lastName: "Doe",
-        accountType: "Credit Card",
+        accountType: accountType,
         emailAddress: email,
         accountNumber: bankAccountNumber,
         address: address,
@@ -98,16 +103,34 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Insert row into call_records table
-    const supabase = await createClient();
+    const nlpData = await nlPearlResponse.json();
 
-    const initialRecord = {};
+    // Insert row into call_records table
+    const supabase = await sbServerClient();
+
+    const initialRecord = {
+      lead_id: nlpData.leadId,
+      pearl_id: pearlId,
+      bank_name: bankName,
+      bank_phone: bankNumberE164,
+      acct_type: accountType,
+      acct_num_last_4: bankAccountNumber.slice(-4),
+      bank_id: bankId,
+    };
 
     const { data: rowData, error: insertError } = await supabase
       .from("call_records")
-      .insert({ id: 1, name: "Mordor" })
+      .insert(initialRecord)
       .select()
       .single();
+
+    if (insertError) {
+      console.error("Failed to insert call record:", insertError);
+      return NextResponse.json(
+        { error: "Failed to insert call record", errorDetails: insertError },
+        { status: 500 },
+      );
+    }
 
     const data = await nlPearlResponse.json();
 

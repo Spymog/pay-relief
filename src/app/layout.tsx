@@ -6,7 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
 import { UserProvider } from "@/context/UserProvider";
-import { createClient } from "@/lib/supabase/server";
+import { sbServerClient } from "@/lib/supabase/server";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -49,7 +49,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
+  const supabase = await sbServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

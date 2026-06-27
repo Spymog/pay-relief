@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { sbServerClient } from "@/lib/supabase/server";
 
 export interface Bank {
   id: string;
@@ -21,7 +21,7 @@ const BANK_SELECT_FIELDS =
  * Intended for server components / server actions.
  */
 export async function getBanks(): Promise<Bank[]> {
-  const supabase = await createClient();
+  const supabase = await sbServerClient();
 
   const { data, error } = await supabase
     .from("banks")
@@ -41,7 +41,7 @@ export async function getBanks(): Promise<Bank[]> {
  * Fetches a single bank by slug.
  */
 export async function getBankBySlug(slug: string): Promise<Bank | null> {
-  const supabase = await createClient();
+  const supabase = await sbServerClient();
 
   const { data, error } = await supabase
     .from("banks")

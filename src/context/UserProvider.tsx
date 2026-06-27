@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
+import { sbBrowserClient } from "@/lib/supabase/client";
 
 const UserContext = createContext<User | null>(null);
 
@@ -13,7 +13,7 @@ export function UserProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
-  const supabase = createClient();
+  const supabase = sbBrowserClient();
 
   useEffect(() => {
     const {

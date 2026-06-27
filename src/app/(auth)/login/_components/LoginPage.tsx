@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/lib/supabase/client";
+import { sbBrowserClient } from "@/lib/supabase/client";
 import { signInSchema, type SignInValues } from "@/lib/auth-schemas";
 
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ import {
 import { Loader2, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
 
 export default function SignInPage() {
-  const supabase = createClient();
+  const supabase = sbBrowserClient();
 
   const [serverMessage, setServerMessage] = useState<{
     text: string;

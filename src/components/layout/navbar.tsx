@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import { useUser } from "@/context/UserProvider";
-import { createClient } from "@/lib/supabase/client";
+import { sbBrowserClient } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "/for-debtors", label: "For Debtors" },
@@ -61,7 +61,7 @@ export function Navbar() {
   }, [pathname]);
 
   async function handleSignOut() {
-    const supabase = createClient();
+    const supabase = sbBrowserClient();
     const { error } = await supabase.auth.signOut();
     if (!error) {
       setIsProfileMenuOpen(false);
