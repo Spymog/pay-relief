@@ -1,9 +1,12 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePlaidLink } from "react-plaid-link";
 import BankAccountForm from "@/app/(app)/deferment-notification/_components/BankAccountForm";
 import type { Bank } from "@/lib/banks";
+import { useCallRecord } from "@/hooks/use-call-record";
+import CallStatus from "@/app/(app)/deferment-notification/_components/CallStatus";
 
 interface LinkProps {
   linkToken: string | null;
@@ -66,6 +69,7 @@ export function DefermentHero({ banks }: { banks: Bank[] }) {
   //   await generateToken();
   //   setShouldOpen(true);
   // }
+  const [callId, setCallId] = useState<string>("");
 
   return (
     <section className="min-h-screen pt-8 pb-20 px-4 overflow-hidden">
@@ -84,7 +88,11 @@ export function DefermentHero({ banks }: { banks: Bank[] }) {
               <>Sign In to Your Bank</>
             )}
           </Button> */}
-        <BankAccountForm banks={banks} />
+        <BankAccountForm banks={banks} onCallRecord={setCallId} />
+
+        <div>
+          {callId ? <CallStatus callId={callId} /> : <p>No call sent yet</p>}
+        </div>
       </div>
     </section>
   );

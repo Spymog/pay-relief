@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { toE164US } from "@/lib/utils";
+import { createClient } from "@supabase/supabase-js";
 import { sbServerClient } from "@/lib/supabase/server";
 
 interface MakeCallRequestBody {
@@ -21,6 +22,15 @@ interface NLPearlLeadPayload {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body: MakeCallRequestBody = await request.json();
+
+    const supabase = await sbServerClient();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !userData.user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const userId = userData.user.id;
 
     const {
       bankAccountNumber,
@@ -105,11 +115,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const nlpData = await nlPearlResponse.json();
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+
+    if (!supabaseUrl || !supabaseSecretKey) {
+      throw new Error(
+        "Missing Supabase environment variables either url and/or publishable key",
+      );
+    }
+
     // Insert row into call_records table
-    const supabase = await sbServerClient();
+    const supabaseAdmin = await createClient(supabaseUrl, supabaseSecretKey);
 
     const initialRecord = {
       lead_id: nlpData.leadId,
+      user_id: userId,
       pearl_id: pearlId,
       bank_name: bankName,
       bank_phone: bankNumberE164,
@@ -118,7 +138,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       bank_id: bankId,
     };
 
-    const { data: rowData, error: insertError } = await supabase
+    const { data: rowData, error: insertError } = await supabaseAdmin
       .from("call_records")
       .insert(initialRecord)
       .select()
@@ -132,10 +152,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const data = await nlPearlResponse.json();
+    // const data = await nlPearlResponse.json();
 
     return NextResponse.json(
-      { success: true, leadId: data.leadId },
+      { success: true, subId: rowData.id },
       { status: 200 },
     );
   } catch (error) {
