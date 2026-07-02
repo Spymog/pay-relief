@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/for-lenders", label: "For Lenders" },
   { href: "/deferment-notification", label: "Deferment" },
   { href: "/notify", label: "Notification" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 // Dropdown menu items

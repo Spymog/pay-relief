@@ -90,7 +90,13 @@ function formatPhone(value: string) {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function BankAccountForm({ banks }: { banks: Bank[] }) {
+export default function BankAccountForm({
+  banks,
+  onCallRecord,
+}: {
+  banks: Bank[];
+  onCallRecord?: (callId: string) => void;
+}) {
   const [submitted, setSubmitted] = useState(false);
   const [bankPopoverOpen, setBankPopoverOpen] = useState(false);
 
@@ -120,12 +126,15 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
   async function onSubmit(values: BankAccountFormValues) {
     console.log("Form submitted:", values);
     setSubmitted(true);
+    const bankName = banks.find((b) => b.id === values.bankId)?.name;
     const response = await fetch("/api/make-call", {
       method: "POST",
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, bankName }),
     });
     const result = await response.json();
-    console.log("NLPearl call response:", result);
+    // console.log("NLPearl call response:", result);
+    console.log("Supabase id:", result);
+    onCallRecord?.(result.subId);
   }
 
   return (
@@ -438,6 +447,7 @@ export default function BankAccountForm({ banks }: { banks: Bank[] }) {
                         </FormItem>
                       )}
                     />
+
                     <Button type="submit" className="min-w-[140px]">
                       Submit
                     </Button>
