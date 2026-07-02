@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -27,6 +28,7 @@ export default function NewCallDialog({ banks }: { banks: Bank[] }) {
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Start a Deferment Call</DialogTitle>
+          <DialogDescription>Start a new call.</DialogDescription>
         </DialogHeader>
         <BankAccountForm banks={banks} onCallRecord={() => setOpen(false)} />
       </DialogContent>
