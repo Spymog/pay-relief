@@ -35,10 +35,5 @@ import Link from "next/link";
 // }
 
 export default function TestPage() {
-  return (
-    <div>
-      This is a test page
-      <Link href="/">Go back to home</Link>
-    </div>
-  );
+  return <div>This is a test page</div>;
 }
