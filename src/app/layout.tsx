@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
 import { UserProvider } from "@/context/UserProvider";
-import { sbServerClient } from "@/lib/supabase/server";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -44,23 +43,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await sbServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   return (
     <html
       lang="en"
       className={`${dmSans.variable} ${cormorantGaramond.variable}`}
     >
       <body className="font-sans antialiased bg-background text-foreground">
-        <UserProvider user={user}>
+        <UserProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>
           <Footer />

@@ -7,9 +7,16 @@ import { useUser } from "@/context/UserProvider";
 export type CallRecord = {
   id: string;
   status: "pending" | "in_progress" | "completed" | "failed" | "cancelled";
+  call_status: number | null;
+  conversation_status: number | null;
   call_outcome: string | null;
   post_call_summary: string | null;
+  documents_required: string | null;
+  next_steps: string | null;
   bank_name: string | null;
+  bank_phone: string | null;
+  acct_type: string | null;
+  acct_num_last_4: string | null;
   created_at: string;
 };
 

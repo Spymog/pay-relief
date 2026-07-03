@@ -3,16 +3,19 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { sbBrowserClient } from "@/lib/supabase/client";
 
-const UserContext = createContext<User | null>(null);
-
-export function UserProvider({
-  user: initialUser,
-  children,
-}: {
+type UserContextValue = {
   user: User | null;
-  children: React.ReactNode;
-}) {
-  const [user, setUser] = useState<User | null>(initialUser);
+  isLoading: boolean;
+};
+
+const UserContext = createContext<UserContextValue>({
+  user: null,
+  isLoading: true,
+});
+
+export function UserProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const supabase = sbBrowserClient();
 
   useEffect(() => {
@@ -20,12 +23,18 @@ export function UserProvider({
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setIsLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, isLoading }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
-export const useUser = () => useContext(UserContext);
+export const useUser = () => useContext(UserContext).user;
+export const useAuthStatus = () => useContext(UserContext);

@@ -8,8 +8,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, UserCircle, LogOut, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useUser } from "@/context/UserProvider";
+import { useAuthStatus } from "@/context/UserProvider";
 import { sbBrowserClient } from "@/lib/supabase/client";
 
 const navLinks = [
@@ -35,7 +36,7 @@ export function Navbar() {
 
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const currentUser = useUser();
+  const { user: currentUser, isLoading: isAuthLoading } = useAuthStatus();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -126,7 +127,9 @@ export function Navbar() {
 
           {/* Auth — pinned to right column */}
           <div className="flex items-center justify-end" ref={profileMenuRef}>
-            {currentUser ? (
+            {isAuthLoading ? (
+              <Skeleton className="h-6 w-6 rounded-full" />
+            ) : currentUser ? (
               <div className="relative">
                 <button
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
@@ -242,7 +245,12 @@ export function Navbar() {
               ))}
 
               <div className="px-4 pt-2 space-y-1 border-t border-border">
-                {currentUser ? (
+                {isAuthLoading ? (
+                  <div className="space-y-2 py-2">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ) : currentUser ? (
                   <>
                     {profileMenuItems.map(({ href, label, icon: Icon }) => (
                       <Link
