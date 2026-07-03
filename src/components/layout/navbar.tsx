@@ -20,7 +20,6 @@ const navLinks = [
   { href: "/deferment-notification", label: "Deferment" },
   { href: "/notify", label: "Notification" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/test", label: "Test" },
 ];
 
 // Dropdown menu items
