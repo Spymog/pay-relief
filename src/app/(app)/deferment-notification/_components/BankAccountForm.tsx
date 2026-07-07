@@ -447,24 +447,7 @@ export default function BankAccountForm({
                         </FormItem>
                       )}
                     />
-                    <Button
-                      onClick={() => {
-                        const testData: BankAccountFormValues = {
-                          bankId: "a65842d4-ad69-47a1-98cb-95ef43924cad",
-                          bankAccountNumber: "121234345656",
-                          phoneNumber: "9876543210",
-                          address: "5678 Somewhere St, CA",
-                          bankContactNumber: "7143064260",
-                          email: "jng1437@gmail.com",
-                          ssnLast4: "1234",
-                        };
-                        onSubmit(testData);
-                      }}
-                      type="button"
-                      className="min-w-[140px]"
-                    >
-                      Test Submit
-                    </Button>
+
                     <Button type="submit" className="min-w-[140px]">
                       Submit
                     </Button>
