@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
 import { UserProvider } from "@/context/UserProvider";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -55,9 +56,11 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased bg-background text-foreground">
         <UserProvider>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <AuthGuard>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </AuthGuard>
         </UserProvider>
         <Analytics />
       </body>

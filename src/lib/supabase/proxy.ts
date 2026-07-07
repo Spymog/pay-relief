@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isProtectedPath } from "@/lib/auth/protected-paths";
 
 export async function updateSession(request: NextRequest) {
   // console.log("Supabase Auth proxy triggerd");
@@ -45,14 +46,8 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    request.nextUrl.pathname.startsWith("/deferment-notification")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    console.log("test");
+  if (!user && isProtectedPath(request.nextUrl.pathname)) {
+    // no user, respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

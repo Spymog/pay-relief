@@ -1,0 +1,25 @@
+"use client";
+
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthStatus } from "@/context/UserProvider";
+import { isProtectedPath } from "@/lib/auth/protected-paths";
+
+/**
+ * Redirects to /login when the session ends while a protected page is open
+ * (sign out in this or another tab, session expiry). Initial navigation to
+ * protected pages is handled server-side by the middleware.
+ */
+export function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuthStatus();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user && isProtectedPath(pathname)) {
+      router.replace("/login");
+    }
+  }, [isLoading, user, pathname, router]);
+
+  return <>{children}</>;
+}

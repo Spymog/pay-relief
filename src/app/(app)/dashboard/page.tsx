@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { sbServerClient } from "@/lib/supabase/server";
 import { getBanks } from "@/app/actions/getBanks";
 import NewCallDialog from "./_components/NewCallDialog";
 import CallRecordsView from "./_components/CallRecordsView";
@@ -9,6 +11,13 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
+  const supabase = await sbServerClient();
+  const { data } = await supabase.auth.getClaims();
+
+  if (!data?.claims) {
+    redirect("/login");
+  }
+
   const banks = await getBanks();
 
   return (
