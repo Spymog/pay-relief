@@ -15,11 +15,19 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const shouldRedirect = !isLoading && !user && isProtectedPath(pathname);
+
   useEffect(() => {
-    if (!isLoading && !user && isProtectedPath(pathname)) {
+    if (shouldRedirect) {
       router.replace("/login");
     }
-  }, [isLoading, user, pathname, router]);
+  }, [shouldRedirect, router]);
+
+  // Unmount the protected page immediately so its logged-out state never
+  // paints during the gap before the redirect lands.
+  if (shouldRedirect) {
+    return null;
+  }
 
   return <>{children}</>;
 }

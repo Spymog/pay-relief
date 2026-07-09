@@ -14,10 +14,8 @@ import { useAuthStatus } from "@/context/UserProvider";
 import { sbBrowserClient } from "@/lib/supabase/client";
 
 const navLinks = [
-  { href: "/for-debtors", label: "For Debtors" },
-  { href: "/for-counselors", label: "For Counselors" },
-  { href: "/notify", label: "Notification" },
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/notify", label: "Notification" },
 ];
 
 // Dropdown menu items
@@ -78,7 +76,7 @@ export function Navbar() {
       <nav className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/for-debtors" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex w-fit items-center gap-2.5 group">
             <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
               <Image
                 src="/images/pay-relief-logo.png"
@@ -124,82 +122,103 @@ export function Navbar() {
 
           {/* Auth — pinned to right column */}
           <div className="flex items-center justify-end" ref={profileMenuRef}>
-            {isAuthLoading ? (
-              <Skeleton className="h-6 w-6 rounded-full" />
-            ) : currentUser ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                  className={cn(
-                    "text-muted-foreground hover:text-accent transition-colors",
-                    (isProfileMenuOpen || pathname === "/profile") &&
-                      "text-foreground",
-                  )}
-                  aria-label="Open profile menu"
-                  aria-expanded={isProfileMenuOpen}
-                  aria-haspopup="true"
+            <AnimatePresence mode="wait" initial={false}>
+              {isAuthLoading ? (
+                <motion.div
+                  key="auth-loading"
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
-                  <UserCircle className="h-6 w-6" />
-                </button>
+                  <Skeleton className="h-8 w-20 rounded-md" />
+                </motion.div>
+              ) : currentUser ? (
+                <motion.div
+                  key="auth-profile"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="relative flex h-8 w-20 items-center justify-center"
+                >
+                  <button
+                    onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                    className={cn(
+                      "text-muted-foreground hover:text-accent transition-colors",
+                      (isProfileMenuOpen || pathname === "/profile") &&
+                        "text-foreground",
+                    )}
+                    aria-label="Open profile menu"
+                    aria-expanded={isProfileMenuOpen}
+                    aria-haspopup="true"
+                  >
+                    <UserCircle className="h-6 w-6" />
+                  </button>
 
-                <AnimatePresence>
-                  {isProfileMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                      transition={{ duration: 0.15, ease: "easeOut" }}
-                      className="absolute right-0 mt-2 w-48 rounded-lg border border-border bg-background shadow-lg overflow-hidden"
-                      role="menu"
-                    >
-                      {currentUser?.email && (
-                        <div className="px-4 py-3 border-b border-border">
-                          <p className="text-xs text-muted-foreground truncate">
-                            {currentUser.email}
-                          </p>
+                  <AnimatePresence>
+                    {isProfileMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                        transition={{ duration: 0.15, ease: "easeOut" }}
+                        className="absolute right-0 top-full mt-1 w-48 rounded-lg border border-border bg-background shadow-lg overflow-hidden"
+                        role="menu"
+                      >
+                        {currentUser?.email && (
+                          <div className="px-4 py-3 border-b border-border">
+                            <p className="text-xs text-muted-foreground truncate">
+                              {currentUser.email}
+                            </p>
+                          </div>
+                        )}
+
+                        {profileMenuItems.map(({ href, label, icon: Icon }) => (
+                          <Link
+                            key={href}
+                            href={href}
+                            role="menuitem"
+                            className={cn(
+                              "flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted",
+                              pathname === href
+                                ? "text-foreground bg-primary/5"
+                                : "text-muted-foreground",
+                            )}
+                          >
+                            <Icon className="h-4 w-4" />
+                            {label}
+                          </Link>
+                        ))}
+
+                        <div className="border-t border-border">
+                          <button
+                            onClick={handleSignOut}
+                            role="menuitem"
+                            className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
+                          >
+                            <LogOut className="h-4 w-4" />
+                            Sign Out
+                          </button>
                         </div>
-                      )}
-
-                      {profileMenuItems.map(({ href, label, icon: Icon }) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          role="menuitem"
-                          className={cn(
-                            "flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted",
-                            pathname === href
-                              ? "text-foreground bg-primary/5"
-                              : "text-muted-foreground",
-                          )}
-                        >
-                          <Icon className="h-4 w-4" />
-                          {label}
-                        </Link>
-                      ))}
-
-                      <div className="border-t border-border">
-                        <button
-                          onClick={handleSignOut}
-                          role="menuitem"
-                          className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
-                        >
-                          <LogOut className="h-4 w-4" />
-                          Sign Out
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <Button
-                asChild
-                size="sm"
-                className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium px-5"
-              >
-                <Link href="/login">Login</Link>
-              </Button>
-            )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="auth-login"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  <Button
+                    asChild
+                    size="sm"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium w-20"
+                  >
+                    <Link href="/login">Login</Link>
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Mobile Menu Button */}
             <button
