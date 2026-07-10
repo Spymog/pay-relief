@@ -13,9 +13,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStatus } from "@/context/UserProvider";
 import { sbBrowserClient } from "@/lib/supabase/client";
 
-const navLinks = [
+const navLinks = [{ href: "/notify", label: "Notification" }];
+
+const mobileNavLinks = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/notify", label: "Notification" },
+  ...navLinks,
 ];
 
 // Dropdown menu items
@@ -122,6 +124,19 @@ export function Navbar() {
 
           {/* Auth — pinned to right column */}
           <div className="flex items-center justify-end" ref={profileMenuRef}>
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className={cn(
+                "hidden md:inline-flex mr-3 font-medium",
+                pathname === "/dashboard"
+                  ? "text-foreground"
+                  : "text-muted-foreground",
+              )}
+            >
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
             <AnimatePresence mode="wait" initial={false}>
               {isAuthLoading ? (
                 <motion.div
@@ -244,7 +259,7 @@ export function Navbar() {
             className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg"
           >
             <div className="py-4 space-y-2">
-              {navLinks.map((link) => (
+              {mobileNavLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
