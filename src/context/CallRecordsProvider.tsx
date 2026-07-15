@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { sbBrowserClient } from "@/lib/supabase/client";
-import { useUser } from "@/context/UserProvider";
+import { useUser } from "@/context/AuthProvider";
 
 export type CallRecord = {
   id: string;

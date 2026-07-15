@@ -54,7 +54,7 @@ export default function SignInPage() {
         text: "Signed in successfully! Redirecting…",
         type: "success",
       });
-      window.location.href = "/for-debtors";
+      window.location.href = "/dashboard";
     }
   };
 

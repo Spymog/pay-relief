@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@/context/UserProvider";
+import { useUser } from "@/context/AuthProvider";
 
 export default function ProfileCard() {
   const currentUser = useUser();

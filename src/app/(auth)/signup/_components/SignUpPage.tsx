@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sbBrowserClient } from "@/lib/supabase/client";
@@ -30,6 +31,7 @@ import { Loader2, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
 
 export default function SignUpPage() {
   const supabase = sbBrowserClient();
+  const router = useRouter();
 
   const [serverMessage, setServerMessage] = useState<{
     text: string;
@@ -54,11 +56,7 @@ export default function SignUpPage() {
     if (error) {
       setServerMessage({ text: error.message, type: "error" });
     } else {
-      setServerMessage({
-        text: "Account created! Check your email to confirm before signing in.",
-        type: "success",
-      });
-      form.reset();
+      router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
     }
   };
 

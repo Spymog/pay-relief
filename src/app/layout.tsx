@@ -5,7 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
-import { UserProvider } from "@/context/UserProvider";
+import { AuthProvider } from "@/context/AuthProvider";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 
 const dmSans = DM_Sans({
@@ -43,13 +43,13 @@ export default function RootLayout({
       className={`${dmSans.variable} ${cormorantGaramond.variable}`}
     >
       <body className="font-sans antialiased bg-background text-foreground">
-        <UserProvider>
+        <AuthProvider>
           <AuthGuard>
             <Navbar />
             <main className="min-h-screen">{children}</main>
             <Footer />
           </AuthGuard>
-        </UserProvider>
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthStatus } from "@/context/UserProvider";
+import { useAuthStatus } from "@/context/AuthProvider";
 import { isProtectedPath } from "@/lib/auth/protected-paths";
 
 /**

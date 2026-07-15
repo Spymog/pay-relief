@@ -5,23 +5,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, UserCircle, LogOut, Settings, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  UserCircle,
+  LogOut,
+  Settings,
+  User,
+  LayoutDashboard,
+  Bell,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useAuthStatus } from "@/context/UserProvider";
+import { useAuthStatus } from "@/context/AuthProvider";
 import { sbBrowserClient } from "@/lib/supabase/client";
-
-const navLinks = [{ href: "/notify", label: "Notification" }];
-
-const mobileNavLinks = [
-  { href: "/dashboard", label: "Dashboard" },
-  ...navLinks,
-];
 
 // Dropdown menu items
 const profileMenuItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/notify", label: "Notification", icon: Bell },
   { href: "/profile", label: "Profile", icon: User },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
@@ -76,7 +80,7 @@ export function Navbar() {
       )}
     >
       <nav className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 lg:h-20">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex w-fit items-center gap-2.5 group">
             <div className="relative w-11 h-11 transition-transform group-hover:scale-105">
@@ -92,51 +96,8 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav Links — centered in middle column */}
-          <div className="hidden md:flex items-center justify-center gap-8 min-w-fit">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium hover:text-accent relative py-2",
-                  pathname === link.href
-                    ? "text-foreground"
-                    : "text-muted-foreground",
-                )}
-              >
-                {link.label}
-                <AnimatePresence>
-                  {pathname === link.href && (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                    />
-                  )}
-                </AnimatePresence>
-              </Link>
-            ))}
-          </div>
-
           {/* Auth — pinned to right column */}
           <div className="flex items-center justify-end" ref={profileMenuRef}>
-            <Button
-              asChild
-              size="sm"
-              variant="outline"
-              className={cn(
-                "hidden md:inline-flex mr-3 font-medium",
-                pathname === "/dashboard"
-                  ? "text-foreground"
-                  : "text-muted-foreground",
-              )}
-            >
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
             <AnimatePresence mode="wait" initial={false}>
               {isAuthLoading ? (
                 <motion.div
@@ -259,23 +220,7 @@ export function Navbar() {
             className="md:hidden border-t border-border bg-background/95 backdrop-blur-lg"
           >
             <div className="py-4 space-y-2">
-              {mobileNavLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={cn(
-                    "block px-4 py-3 text-base font-medium rounded-lg transition-colors",
-                    pathname === link.href
-                      ? "bg-primary/10 text-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              <div className="px-4 pt-2 space-y-1 border-t border-border">
+              <div className="px-4 space-y-1">
                 {isAuthLoading ? (
                   <div className="space-y-2 py-2">
                     <Skeleton className="h-10 w-full" />

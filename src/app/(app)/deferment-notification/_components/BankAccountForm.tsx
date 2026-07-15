@@ -41,7 +41,7 @@ import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ShieldCheck, Building2, Eye, EyeOff } from "lucide-react";
 import type { Bank } from "@/lib/banks";
-import { useUser } from "@/context/UserProvider";
+import { useUser } from "@/context/AuthProvider";
 
 // ── Validation Schema ────────────────────────────────────────────────────────
 
