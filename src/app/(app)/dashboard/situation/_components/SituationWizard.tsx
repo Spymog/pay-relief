@@ -314,7 +314,6 @@ export default function SituationWizard({
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
-                        captionLayout="dropdown"
                         startMonth={new Date(1900, 0)}
                         endMonth={new Date()}
                         disabled={{ after: new Date() }}
@@ -355,7 +354,6 @@ export default function SituationWizard({
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
-                        captionLayout="dropdown"
                         startMonth={new Date()}
                         endMonth={new Date(2099, 11)}
                         disabled={{ before: new Date() }}

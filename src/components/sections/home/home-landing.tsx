@@ -65,11 +65,7 @@ export function HomeLanding() {
 
       <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12">
           <Badge className="mb-4 bg-accent/15 text-primary hover:bg-accent/15">
             Financial Advocacy Platform
           </Badge>
@@ -81,15 +77,11 @@ export function HomeLanding() {
             Connect your accounts, tell us your situation, and let PayRelief
             call and notify your lenders for you. Save hours every week.
           </p>
-        </motion.div>
+        </div>
 
         {/* Main Action Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div>
             <Card className="h-full border-2 border-primary/10 bg-gradient-to-br from-card to-secondary/40 hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="p-3 w-fit rounded-xl bg-primary/10 mb-2">
@@ -115,13 +107,9 @@ export function HomeLanding() {
                 </Button>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
+          <div>
             <Card className="h-full border-2 border-accent/20 bg-gradient-to-br from-card to-accent/5 hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="p-3 w-fit rounded-xl bg-accent/15 mb-2">
@@ -145,16 +133,11 @@ export function HomeLanding() {
                 </Button>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         </div>
 
         {/* Features Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <h2 className="font-serif text-3xl font-bold text-foreground text-center mb-8">
             How It Works
           </h2>
@@ -181,14 +164,10 @@ export function HomeLanding() {
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
+        <div>
           <Card className="bg-primary text-primary-foreground border-0">
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -218,7 +197,7 @@ export function HomeLanding() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

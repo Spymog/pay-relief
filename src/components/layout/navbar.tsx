@@ -118,7 +118,7 @@ export function Navbar() {
                   <button
                     onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                     className={cn(
-                      "text-muted-foreground hover:text-accent transition-colors",
+                      "cursor-pointer text-muted-foreground hover:text-accent transition-colors",
                       (isProfileMenuOpen || pathname === "/profile") &&
                         "text-foreground",
                     )}
