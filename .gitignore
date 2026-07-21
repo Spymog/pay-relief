@@ -17,3 +17,5 @@ declarations.d.ts
 
 scripts/
 docs/
+
+supabase/
