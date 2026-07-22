@@ -47,20 +47,20 @@ export type SituationFormData = {
   preferred_communication_tone: string;
 };
 
-type Situation = {
+export type Situation = {
   value: string;
   label: string;
   icon: LucideIcon;
   description: string;
 };
 
-type Option = {
+export type Option = {
   value: string;
   label: string;
   description: string;
 };
 
-const situations: Situation[] = [
+export const situations: Situation[] = [
   {
     value: "job_loss",
     label: "Job Loss",
@@ -93,7 +93,7 @@ const situations: Situation[] = [
   },
 ];
 
-const outcomes: Option[] = [
+export const outcomes: Option[] = [
   {
     value: "lower_payments",
     label: "Lower My Payments",
@@ -116,7 +116,7 @@ const outcomes: Option[] = [
   },
 ];
 
-const tones: Option[] = [
+export const tones: Option[] = [
   {
     value: "formal",
     label: "Formal",

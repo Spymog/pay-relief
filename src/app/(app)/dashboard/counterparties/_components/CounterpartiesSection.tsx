@@ -1,8 +1,19 @@
 "use client";
 
 import { useRef, useState, useTransition, type ChangeEvent } from "react";
-import { Landmark, Loader2, UploadCloud } from "lucide-react";
+import { Landmark, Loader2, Trash2, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +41,7 @@ import {
 } from "@/lib/statement-extraction";
 import {
   createCounterparty,
+  deleteCounterparty,
   type Counterparty,
 } from "@/app/actions/counterparties";
 
@@ -53,6 +65,8 @@ export default function CounterpartiesSection({
     matchedBank: Bank | null;
   } | null>(null);
   const [isSaving, startSaving] = useTransition();
+  const [isDeleting, startDeleting] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [selectedBankId, setSelectedBankId] = useState<string | null>(null);
@@ -124,6 +138,25 @@ export default function CounterpartiesSection({
       setCounterparties((prev) => [result.data as Counterparty, ...prev]);
       setReview(null);
       toast.success(`Added ${result.data.display_name}`);
+    });
+  }
+
+  function handleDelete(counterparty: Counterparty) {
+    setDeletingId(counterparty.id);
+    startDeleting(async () => {
+      const result = await deleteCounterparty(counterparty.id);
+
+      if (result.error) {
+        toast.error(result.error);
+        setDeletingId(null);
+        return;
+      }
+
+      setCounterparties((prev) =>
+        prev.filter((cp) => cp.id !== counterparty.id),
+      );
+      setDeletingId(null);
+      toast.success(`Removed ${counterparty.display_name}`);
     });
   }
 
@@ -288,17 +321,54 @@ export default function CounterpartiesSection({
             {counterparties.map((cp) => (
               <div
                 key={cp.id}
-                className="flex items-center gap-3 rounded-md border p-3"
+                className="flex items-center justify-between gap-3 rounded-md border p-3"
               >
-                <Landmark className="h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">{cp.display_name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {ACCOUNT_TYPE_LABELS[cp.account_type as AccountType] ??
-                      cp.account_type}
-                    {cp.last4 ? ` •••• ${cp.last4}` : ""}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <Landmark className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">{cp.display_name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {ACCOUNT_TYPE_LABELS[cp.account_type as AccountType] ??
+                        cp.account_type}
+                      {cp.last4 ? ` •••• ${cp.last4}` : ""}
+                    </p>
+                  </div>
                 </div>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={isDeleting && deletingId === cp.id}
+                      aria-label={`Remove ${cp.display_name}`}
+                    >
+                      {isDeleting && deletingId === cp.id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <Trash2 />
+                      )}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Remove {cp.display_name}?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This only removes it from your saved list — it
+                        won&apos;t affect anything you&apos;ve already sent or
+                        called about.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDelete(cp)}>
+                        Remove
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             ))}
           </CardContent>

@@ -1,53 +1,66 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { useState, useTransition } from "react";
+import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { saveSituation } from "@/app/actions/situations";
+import CurrentSituationCard from "./CurrentSituationCard";
 import SituationWizard, { type SituationFormData } from "./SituationWizard";
 
-export default function SituationSection() {
-  const [savedData, setSavedData] = useState<SituationFormData | null>(null);
-  const [isEditing, setIsEditing] = useState(true);
+export default function SituationSection({
+  initialSituation,
+}: {
+  initialSituation: SituationFormData | null;
+}) {
+  const [savedData, setSavedData] = useState<SituationFormData | null>(
+    initialSituation,
+  );
+  const [isEditing, setIsEditing] = useState(!initialSituation);
+  const [isSaving, startSaving] = useTransition();
 
   const handleComplete = (data: SituationFormData) => {
-    // TODO: persist to the backend once the situations table/API exists
-    setSavedData(data);
-    setIsEditing(false);
+    startSaving(async () => {
+      const result = await saveSituation(data);
+
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      setSavedData(data);
+      setIsEditing(false);
+      toast.success("Situation saved");
+    });
   };
 
   if (isEditing) {
     return (
-      <SituationWizard
-        onComplete={handleComplete}
-        initialData={savedData ?? undefined}
-      />
+      <div className="space-y-4">
+        {savedData && (
+          <Button variant="ghost" onClick={() => setIsEditing(false)}>
+            <ArrowLeft />
+            Back to My Situation
+          </Button>
+        )}
+        <SituationWizard
+          onComplete={handleComplete}
+          initialData={savedData ?? undefined}
+        />
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-2.5">
-          <CheckCircle2 className="h-6 w-6 text-accent" />
-          <CardTitle className="font-serif text-xl">Situation Saved</CardTitle>
-        </div>
-        <CardDescription>
-          Your answers are stored for this session. They aren&apos;t sent
-          anywhere yet.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Button variant="outline" onClick={() => setIsEditing(true)}>
-          Edit My Answers
-        </Button>
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+      <CurrentSituationCard situation={savedData as SituationFormData} />
+      <Button
+        variant="outline"
+        onClick={() => setIsEditing(true)}
+        disabled={isSaving}
+      >
+        Edit My Answers
+      </Button>
+    </div>
   );
 }

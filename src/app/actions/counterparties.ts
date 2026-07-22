@@ -71,3 +71,26 @@ export async function createCounterparty(
 
   return { data };
 }
+
+export async function deleteCounterparty(
+  id: string,
+): Promise<{ error?: string }> {
+  const supabase = await sbServerClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData.user) {
+    return { error: "You must be signed in." };
+  }
+
+  const { error } = await supabase
+    .from("counterparties")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("[deleteCounterparty] Supabase error:", error.message);
+    return { error: "Failed to remove that counterparty." };
+  }
+
+  return {};
+}
