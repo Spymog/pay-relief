@@ -300,7 +300,7 @@ export default function SituationWizard({
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-start text-left"
+                        className="w-full cursor-pointer justify-start text-left"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {formData.situation_start_date
@@ -340,7 +340,7 @@ export default function SituationWizard({
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-start text-left"
+                        className="w-full cursor-pointer justify-start text-left"
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {formData.expected_resolution_date
@@ -538,6 +538,7 @@ export default function SituationWizard({
         <div className="flex justify-between mt-8 pt-6 border-t border-border">
           <Button
             variant="outline"
+            className="cursor-pointer"
             onClick={() => setStep(step - 1)}
             disabled={step === 1}
           >
@@ -547,7 +548,7 @@ export default function SituationWizard({
           <Button
             onClick={handleNext}
             disabled={!canProceed()}
-            className="bg-accent text-accent-foreground hover:bg-accent/90"
+            className="cursor-pointer bg-accent text-accent-foreground hover:bg-accent/90"
           >
             {step === totalSteps ? (
               <>
