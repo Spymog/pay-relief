@@ -16,6 +16,7 @@ import {
 import type { Counterparty } from "@/app/actions/counterparties";
 import CurrentSituationCard from "../../situation/_components/CurrentSituationCard";
 import type { SituationFormData } from "../../situation/_components/SituationWizard";
+import WizardFooter from "./WizardFooter";
 
 export default function ReviewStep({
   selectedCounterparties,
@@ -29,7 +30,7 @@ export default function ReviewStep({
   onGenerate: () => void;
 }) {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="font-serif text-xl">
@@ -62,7 +63,7 @@ export default function ReviewStep({
 
       <CurrentSituationCard situation={situation} />
 
-      <div className="flex items-center justify-between">
+      <WizardFooter>
         <Button variant="outline" className="cursor-pointer" onClick={onBack}>
           Back
         </Button>
@@ -70,7 +71,7 @@ export default function ReviewStep({
           <Sparkles />
           Generate Script
         </Button>
-      </div>
+      </WizardFooter>
     </div>
   );
 }

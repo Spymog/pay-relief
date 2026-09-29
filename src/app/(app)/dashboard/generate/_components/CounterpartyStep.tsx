@@ -39,6 +39,7 @@ import {
   createCounterparty,
   type Counterparty,
 } from "@/app/actions/counterparties";
+import WizardFooter from "./WizardFooter";
 
 export default function CounterpartyStep({
   counterparties,
@@ -99,7 +100,7 @@ export default function CounterpartyStep({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="font-serif text-xl">
@@ -268,7 +269,7 @@ export default function CounterpartyStep({
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between">
+      <WizardFooter>
         <p className="text-sm text-muted-foreground">
           {selectedIds.size === 0
             ? "Select at least one counterparty to continue."
@@ -281,7 +282,7 @@ export default function CounterpartyStep({
         >
           Continue
         </Button>
-      </div>
+      </WizardFooter>
     </div>
   );
 }

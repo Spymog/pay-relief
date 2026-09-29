@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { Counterparty } from "@/app/actions/counterparties";
 import type { SituationFormData } from "../../situation/_components/SituationWizard";
 import { outcomes, situations } from "../../situation/_components/SituationWizard";
+import WizardFooter from "./WizardFooter";
 
 // Stands in for the real GenAI call (e.g. the Claude API) until that
 // integration is wired up. Swap this out for a request to the backend.
@@ -108,7 +109,7 @@ export default function ScriptResultStep({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="font-serif text-xl">Your Script</CardTitle>
@@ -144,7 +145,7 @@ export default function ScriptResultStep({
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between">
+      <WizardFooter>
         <Button variant="outline" className="cursor-pointer" onClick={onBack}>
           Back to Review
         </Button>
@@ -152,7 +153,7 @@ export default function ScriptResultStep({
           <RotateCcw />
           Start Over
         </Button>
-      </div>
+      </WizardFooter>
     </div>
   );
 }

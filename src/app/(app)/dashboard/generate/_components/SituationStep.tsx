@@ -7,6 +7,7 @@ import CurrentSituationCard from "../../situation/_components/CurrentSituationCa
 import SituationWizard, {
   type SituationFormData,
 } from "../../situation/_components/SituationWizard";
+import WizardFooter from "./WizardFooter";
 
 export default function SituationStep({
   situation,
@@ -28,11 +29,11 @@ export default function SituationStep({
 
   if (isEditing) {
     return (
-      <div className="space-y-4">
+      <div className="flex flex-1 flex-col gap-4">
         {situation && (
           <Button
             variant="ghost"
-            className="cursor-pointer"
+            className="cursor-pointer self-start"
             onClick={() => setIsEditing(false)}
           >
             <ArrowLeft />
@@ -48,10 +49,10 @@ export default function SituationStep({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <CurrentSituationCard situation={situation as SituationFormData} />
 
-      <div className="flex items-center justify-between">
+      <WizardFooter>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -71,7 +72,7 @@ export default function SituationStep({
         <Button className="cursor-pointer" onClick={onContinue}>
           Continue
         </Button>
-      </div>
+      </WizardFooter>
     </div>
   );
 }

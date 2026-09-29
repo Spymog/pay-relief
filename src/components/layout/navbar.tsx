@@ -27,7 +27,7 @@ const profileMenuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/notify", label: "Notification", icon: Bell },
   { href: "/profile", label: "Profile", icon: User },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export function Navbar() {
@@ -112,9 +112,20 @@ export function Navbar() {
                   key="auth-profile"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="relative flex h-8 w-20 items-center justify-center"
+                  transition={{ duration: 0.1, ease: "easeOut" }}
+                  className="relative flex h-8 items-center justify-end gap-3"
                 >
+                  <Link
+                    href="/dashboard"
+                    className={cn(
+                      "hidden md:inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-accent transition-colors",
+                      pathname === "/dashboard" && "text-foreground",
+                    )}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Dashboard
+                  </Link>
+
                   <button
                     onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                     className={cn(

@@ -100,8 +100,10 @@ export default function GenerateWizard({
     setSelectedIds(new Set());
   }
 
+  // `flex-1` so the steps inherit the page's viewport-filling height and can
+  // push their action bar to the bottom of the screen.
   return (
-    <div className="space-y-6">
+    <div className="flex flex-1 flex-col gap-6">
       <StepIndicator step={step} />
 
       {step === 1 && (
