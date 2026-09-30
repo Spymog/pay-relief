@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Award } from "lucide-react";
 
 export function CounselorsHero() {
@@ -77,30 +76,6 @@ export function CounselorsHero() {
           </motion.div>
 
           {/* CTAs */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Button
-              className="bg-accent hover:bg-accent/90 text-primary px-8 py-6 text-base font-semibold rounded-lg"
-              onClick={() =>
-                document
-                  .getElementById("apply-form")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              Apply as a Founding Counselor
-            </Button>
-            {/* <Button
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-base font-semibold rounded-lg"
-            >
-              Learn More
-            </Button> */}
-          </motion.div>
-
           {/* Trust indicator */}
           <motion.p
             className="text-sm text-foreground/50 mt-8"

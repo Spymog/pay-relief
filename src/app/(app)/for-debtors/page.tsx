@@ -4,7 +4,6 @@ import { DebtorsPainPoints } from "@/components/sections/debtors/debtors-pain-po
 import { DebtorsHowItWorks } from "@/components/sections/debtors/debtors-how-it-works";
 import { DebtorsPerks } from "@/components/sections/debtors/debtors-perks";
 import { DebtorsSocialProof } from "@/components/sections/debtors/debtors-social-proof";
-import { DebtorsSignup } from "@/components/sections/debtors/debtors-signup";
 import { DebtorsFounderNote } from "@/components/sections/debtors/debtors-founder-note";
 import { DebtorsFAQ } from "@/components/sections/debtors/debtors-faq";
 
@@ -23,7 +22,6 @@ export default function ForDebtorsPage() {
       {/* <DebtorsSocialProof /> */}
       {/* <DebtorsFounderNote /> */}
       {/* <DebtorsFAQ /> */}
-      {/* <DebtorsSignup /> */}
     </div>
   );
 }

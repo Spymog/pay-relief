@@ -1,33 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, AlertCircle, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useSignup } from "@/hooks/use-signup";
+import { Zap } from "lucide-react";
 
 export function DebtorsHero() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const { signup, isLoading, error } = useSignup();
-
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-    if (!email) return;
-
-    const result = await signup({
-      email,
-      signup_type: "debtor",
-    });
-
-    if (result.success) {
-      setSubmitted(true);
-      setEmail("");
-      setTimeout(() => setSubmitted(false), 3000);
-    }
-  };
-
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-8 pb-20 px-4 overflow-hidden">
       {/* Animated background */}
@@ -71,75 +47,10 @@ export function DebtorsHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-2xl mx-auto"
+          className="text-xl md:text-2xl text-foreground/70 max-w-2xl mx-auto"
         >
           Expert negotiation strategies combined with AI-powered insights to
           help you settle your debts faster and save thousands.
-        </motion.p>
-
-        {/* Email signup form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-12 max-w-xl mx-auto w-full"
-        >
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-                className="h-12 flex-1 bg-white border-border disabled:opacity-50"
-              />
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isLoading || submitted}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 h-12 flex-shrink-0 disabled:opacity-50 hover:cursor-pointer"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
-                    Saving...
-                  </>
-                ) : submitted ? (
-                  <>
-                    <CheckCircle2 className="h-4 w-4" />
-                    You're in!
-                  </>
-                ) : (
-                  <>
-                    Join the Waitlist
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-lg"
-              >
-                <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                <span>{error}</span>
-              </motion.div>
-            )}
-          </form>
-        </motion.div>
-
-        {/* Social proof */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-sm text-foreground/60"
-        >
-          Join 5,000+ people waiting to take control of their debt
         </motion.p>
       </div>
     </section>

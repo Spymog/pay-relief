@@ -5,9 +5,7 @@ import { CounselorsHowItWorks } from "@/components/sections/counselors/counselor
 import { CounselorsPerkss } from "@/components/sections/counselors/counselors-perks";
 import { CounselorsSpecializations } from "@/components/sections/counselors/counselors-specializations";
 import { CounselorsEarnings } from "@/components/sections/counselors/counselors-earnings";
-import { CounselorsApplyForm } from "@/components/sections/counselors/counselors-apply-form";
 import { CounselorsFAQ } from "@/components/sections/counselors/counselors-faq";
-import { CounselorsFinalCTA } from "@/components/sections/counselors/counselors-final-cta";
 
 export const metadata: Metadata = {
   title: "For Counselors — PayRelief",
@@ -23,9 +21,7 @@ export default function ForCounselorsPage() {
       <CounselorsPerkss />
       {/* <CounselorsSpecializations /> */}
       <CounselorsEarnings />
-      <CounselorsApplyForm />
       {/* <CounselorsFAQ /> */}
-      {/* <CounselorsFinalCTA /> */}
     </div>
   );
 }
